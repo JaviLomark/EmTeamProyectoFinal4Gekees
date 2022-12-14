@@ -25,6 +25,10 @@ api = Blueprint('api', __name__)
 
 #     return jsonify(response_body), 200
 
+@app.route('/')
+def sitemap():
+    return generate_sitemap(app)
+
 @api.route('/signup', methods=['POST'])
 def signup():
     body = request.get_json()
@@ -69,3 +73,21 @@ def login():
 
     token = create_access_token(identity=user.serialize())
     return jsonify(token=token)
+
+@app.route('/candidatos', methods=['GET'])
+def lista_candidatos():
+    candidatos = Usuario.query.all()
+    lista_candidatos = list(map(lambda obj : obj.serialize(),candidatos))
+    response_body = {
+        
+        "success": True,
+        "results": lista_candidatos()
+    }
+
+    return jsonify(response_body.serialize()), 200
+
+@app.route('/candidatos/<int:usuario_id>', methods=['GET'])
+def show_usuario(usuario_id):
+    usuario.Id = usuario.query.get(usuario_id)
+    print(usuario.Id)
+    return jsonify(usuarioId.serialize()), 200
