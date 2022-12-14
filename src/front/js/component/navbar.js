@@ -1,24 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../styles/navbarStyles.css";
+import { MenuHome } from "../component/menuHome";
+import { CandidateMenu } from "../component/candidateMenu";
+import { CompanyMenu } from "../component/companyMenu";
 
 export const Navbar = () => {
+  const typeMenu = true;
+
   return (
-    <nav className="navbar navbar-light bg-light">
-      <div className="container">
+    <nav className="navbar navbar-expand-lg bg-light">
+      <div className="container-fluid">
         <Link to="/">
-          <span className="navbar-brand mb-0 h1">EmTalent</span>
+          <span className="navbar-brand h1">EmTalen</span>
         </Link>
-        <div className="ml-auto">
-          <Link to="/demo">
-            <button className="btn btn-primary">
-              Check the Context in action
-            </button>
-          </Link>
-        </div>
-      </div>
-      <div className="bajo container-fluid">
-        <span className="hola">Perfil candidato</span>
+        {/* <MenuHome />
+        <CandidateMenu />
+        <CompanyMenu /> */}
+        {typeMenu ? <MenuHome /> : <CandidateMenu /> || <CompanyMenu />}
       </div>
     </nav>
   );

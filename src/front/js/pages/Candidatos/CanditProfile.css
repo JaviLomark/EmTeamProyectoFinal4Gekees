@@ -1,0 +1,97 @@
+.MiPerfil {
+  background-color: rgba(254, 193, 64, 1);
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+.MiPerfil {
+  background-color: rgba(254, 193, 64, 1);
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  background-color: BLACK;
+  border-radius: 40px;
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  background-color: BLACK;
+  border-radius: 40px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.switch:after {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 30px;
+  background-color: white;
+  top: 2.3px;
+  left: 2.5px;
+  transition: all 0.3s;
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 30px;
+  background-color: white;
+  top: 2.3px;
+  left: 2.5px;
+  transition: all 0.3s;
+}
+
+#toggle:checked + .switch:after {
+  transform: translateX(20px);
+  background-color: #fff;
+}
+
+#toggle:checked + .switch {
+  background-color: rgba(254, 193, 64, 1);
+}
+
+
+.offscreen {
+  position: absolute;
+  left: -999px;
+  position: absolute;
+  left: -999px;
+}
+#avatar {
+  height: 25rem;
+  margin-bottom: 1rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+#BtnGuardar {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+#BGuardar {
+  height: 3rem;
+  width: 18rem;
+  font-size: 32px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.izquierda {
+  float: left;
+  display: flex;
+  flex-direction: column;
+}
+.derecha {
+  float: right;
+  display: flex;
+  flex-direction: column;
+}
