@@ -86,6 +86,7 @@ def login():
         identity={"rol": "usuario", "data": user.serialize()})
     return jsonify({"msg": None, "data": token})
 
+    
 # @api.route('/candidato/<int:id>/', methods=['GET'])
 # @jwt_required()
 # def editar_candidato(id):
@@ -130,6 +131,26 @@ def login():
 # def actualizar_empresa(id):
 #     return jsonify({"msg":"Error al actualizar", "data": None}), 200
 
+
+
+@app.route('/candidatos', methods=['GET'])
+def lista_candidatos():
+    candidatos = Usuario.query.all()
+    lista_candidatos = list(map(lambda obj : obj.serialize(),candidatos))
+    response_body = {
+        
+        "success": True,
+        "results": lista_candidatos()
+    }
+
+    return jsonify(response_body.serialize()), 200
+
+@app.route('/candidatos/<int:usuario_id>', methods=['GET'])
+def show_usuario(usuario_id):
+    usuario.Id = usuario.query.get(usuario_id)
+    print(usuario.Id)
+    return jsonify(usuarioId.serialize()), 200
+    
 # @api.route('/empresa/<int:id>/', methods=['DELETE'])
 # @jwt_required()
 # def eliminar_empresa(id):
