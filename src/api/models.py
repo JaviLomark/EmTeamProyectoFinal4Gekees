@@ -15,6 +15,12 @@ class Usuario(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
 
+    def serialize(self):
+        return {
+            "email": self.email,
+            "password": self.password
+        }
+
 class Tipo_Empleo(db.Model):
     __tablename__ = "Tipo_Empleo"
 
