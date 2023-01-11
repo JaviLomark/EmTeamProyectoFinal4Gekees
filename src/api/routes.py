@@ -36,19 +36,17 @@ def signup():
     passwordRepeat = body.get("passwordRepeat")
 
     if email is None or passwordNew is None or passwordRepeat is None:
-        return jsonify({"msg": "Email o password incorrecto", "data": None}), 400
+        return jsonify({"msg": "Por favor, rellena los campos", "data": None}), 400
 
     if len(passwordNew) < 6:
-        return jsonify({"msg": "Formato de password incorrecto", "data": None}), 400
+        return jsonify({"msg": "Formato de contraseña incorrecto, la contraseña debe tener 6 caracteres como mínimo", "data": None}), 400
 
     if passwordNew != passwordRepeat:
-        return jsonify({"msg": "Los password no son iguales", "data": None}), 400
+        return jsonify({"msg": "Las contraseñas no coinciden", "data": None}), 400
 
-    # verificar si usuario existe
     usuarioLista = Usuario.query.filter_by(email = email).all()
     if (len(usuarioLista) > 0): 
-        return jsonify({"msg": "Usuario ya registrado!!! :( ", "data": None}), 400
-
+        return jsonify({"msg": "Usuario ya registrado!", "data": None}), 400
 
     hash = bcrypt.generate_password_hash(passwordNew)
     print(hash)

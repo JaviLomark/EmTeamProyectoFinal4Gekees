@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const HOSTNAME =
-  "https://3001-4geeksacade-reactflaskh-oxcbm6rsuhk.ws-eu80.gitpod.io";
+  "https://3001-4geeksacade-reactflaskh-oxcbm6rsuhk.ws-eu81.gitpod.io";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -12,20 +12,18 @@ export const Navbar = () => {
     const passwordNew = document.getElementById("password-registro").value;
     const passwordRepeat = document.getElementById("password-repite").value;
 
-    // console.log({
-    //   email,
-    //   password,
-    //   passwordRepeat,
-    // });
-
-    if (passwordNew.length < 6) {
-      alert(
-        "Formato de contraseña incorrecto, la contraseña debe tener 6 caracteres como mínimo"
-      );
+    if ((email == 0) & (passwordNew == 0) & (passwordRepeat == 0)) {
+      alert("Por favor, rellena los campos");
       return;
     }
-    if (passwordNew !== passwordRepeat) {
-      alert("Las contraseñas no coinciden");
+
+    if (email.length == 0) {
+      alert("Por favor, introduce un correo");
+      return;
+    }
+
+    if ((passwordNew == 0) & (passwordRepeat == 0)) {
+      alert("Por favor, crea una contraseña");
       return;
     }
 
@@ -48,20 +46,35 @@ export const Navbar = () => {
     if (res.status != 201) {
       alert(data.msg);
       return;
+    } else {
+      alert("Cuenta creada! Puedes aceder a tu cuenta");
     }
 
-    // Cerrar el modal
     const btnCerrar = document.getElementById("cerrar-modal-registro");
     btnCerrar.click();
-
-    // navigate("/candidato");
   };
 
   const onAcceso = async () => {
     const email = document.getElementById("email-login").value;
     const password = document.getElementById("password-login").value;
 
+    if ((email == 0) & (password == 0)) {
+      alert("Por favor, introduce tu correo y contraseña");
+      return;
+    }
+
+    if (email.length === 0) {
+      alert("Por favor, introduce tu correo");
+      return;
+    }
+
+    if (password.length === 0) {
+      alert("Por favor, introduce tu contraseña");
+      return;
+    }
+
     const body = JSON.stringify({ email, password });
+
     const res = await fetch(`${HOSTNAME}/api/login`, {
       method: "POST",
       headers: {
@@ -74,6 +87,11 @@ export const Navbar = () => {
     if (res.status == 200) {
       const token = data.data;
       localStorage.token = JSON.stringify({ token });
+      navigate("/canditprofile");
+      const btnCerrar = document.getElementById("cerrar-modal-acceso");
+      btnCerrar.click();
+    } else {
+      alert(data.msg);
     }
   };
 
@@ -87,7 +105,7 @@ export const Navbar = () => {
           {/* <!-- Button trigger modal CREAR CUENTA--> */}
           <button
             type="button"
-            className="btn btn-outline-primary me-2"
+            className="btn btn-primary me-2"
             data-bs-toggle="modal"
             data-bs-target="#ModalRegistro"
           >
@@ -201,6 +219,7 @@ export const Navbar = () => {
                       type="button"
                       className="btn-close"
                       data-bs-dismiss="modal"
+                      id="cerrar-modal-acceso"
                       aria-label="Close"
                     ></button>
                   </div>
