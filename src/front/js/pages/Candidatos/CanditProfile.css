@@ -1,14 +1,10 @@
 .MiPerfil{
+
     background-color: rgba(254, 193, 64, 1);
     text-align: center;
     padding-top: 15px;
     padding-bottom: 15px;
-}
-.container{
-    margin-top: 15px;
-    margin-bottom: 15px;
-    margin-left: 15px;
-    margin-right: 15px;
+
 }
 .switch {
     position: relative;
@@ -45,4 +41,41 @@ input[type='checkbox']:checked + .switch {
 .offscreen {
     position: absolute;
     left: -999px;
+}
+
+#avatar{
+    height: 500px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+#avatar>img{
+    border-radius: 100%;
+    border: 5px;
+    border-color: grey;
+}
+#BtnGuardar{
+    display: flex;
+    justify-content: center;
+}
+#BGuardar{
+    height: 100px;
+    width: 400px;
+    font-size: 32px;
+    border-radius: 15px;
+}
+.form-control{
+    height: auto;
+    width: 400px;
+    display: flex;
+    
+}
+#apellido1{
+    float: right;
+}
+
+.inputs{
+    height: 100px;
+    width: 500px;
+    display: ;
 }
