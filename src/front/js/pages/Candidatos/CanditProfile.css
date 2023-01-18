@@ -3,12 +3,8 @@
   text-align: center;
   padding-top: 15px;
   padding-bottom: 15px;
-.MiPerfil {
-  background-color: rgba(254, 193, 64, 1);
-  text-align: center;
-  padding-top: 15px;
-  padding-bottom: 15px;
 }
+
 .switch {
   position: relative;
   display: inline-block;
@@ -56,7 +52,6 @@
 #toggle:checked + .switch {
   background-color: rgba(254, 193, 64, 1);
 }
-
 
 .offscreen {
   position: absolute;

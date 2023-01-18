@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Usuario
+from api.models import db, User, Usuario, Candidato
 from api.utils import generate_sitemap, APIException
 from flask_bcrypt import Bcrypt
 
@@ -34,6 +34,7 @@ def signup():
     email = body.get("email")
     passwordNew = body.get("passwordNew")
     passwordRepeat = body.get("passwordRepeat")
+    # esCandidato = body.get('candidato')
 
     if email is None or passwordNew is None or passwordRepeat is None:
         return jsonify({"msg": "Por favor, rellena los campos", "data": None}), 400
@@ -55,6 +56,7 @@ def signup():
     user = Usuario(
         email = email,
         password = hash.decode('utf-8'),
+        candidato = False # body.get('candidato')
     )
 
     print(body)
@@ -92,10 +94,12 @@ def login():
     isValid = bcrypt.check_password_hash(hash, password)
     if not isValid:
         return jsonify({"msg": "Clave incorrecta", "data": None}), 400
-    info = Candidato.query.filter_by(Usuario=user.id).first()
+    # Solo si el usuario es candidato OJOOOOOOOO
+    # candidatos = Candidato.query.filter_by(usuario_id=user.id).first()
+    # candidato = candidatos[0]
 
     token = create_access_token(
-        identity={"rol": "usuario", "data": user.serialize(), "info":info.serialize()})
+        identity={"rol": "usuario", "data": user.serialize()})
     return jsonify({"msg": None, "data": token})
 
 # @api.route('/candidato/<int:id>/', methods=['GET'])

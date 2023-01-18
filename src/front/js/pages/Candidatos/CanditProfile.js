@@ -1,5 +1,7 @@
 import propTypes from "prop-types";
-import React, { useState, Component } from "react";
+import React, { useState, Component, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { onPrivate } from "../../private.js";
 import "./image1.png";
 import "./CanditProfile.css";
 
