@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../styles/navbarStyles.css";
+import "./info.css";
 
-export const Navbar = () => {
+export const Info = () => {
   return (
     <nav className="navbar navbar-light bg-light">
       <div className="container">
@@ -16,9 +16,6 @@ export const Navbar = () => {
             </button>
           </Link>
         </div>
-      </div>
-      <div className="bajo container-fluid">
-        <span className="hola">Perfil candidato</span>
       </div>
     </nav>
   );
