@@ -5,13 +5,12 @@ import ScrollToTop from "./component/scrollToTop";
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
+import { Candidato } from "./pages/Candidatos/Candidato";
 import { FormularioCandit } from "./pages/Candidatos/CanditProfile";
-import { FormularioEmp } from "./pages/Empresas/EmpProfile.js";
-import { Candidato } from "./pages/Candidatos/VerCandidato";
+import { FormularioEmp } from "./pages/Empresas/EmpProfile";
 
 import injectContext from "./store/appContext";
 
-import PerfilCandidato from "./pages/perfilCandidato.jsx";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 
@@ -27,12 +26,11 @@ const Layout = () => {
         <ScrollToTop>
           <Navbar />
           <Routes>
-            <Route element={<PerfilCandidato />} path="/perfil_candidato" />
+            <Route element={<Candidato />} path="/candidato" />
             <Route element={<Home />} path="/" />
             <Route element={<Demo />} path="/demo" />
             <Route element={<FormularioCandit />} path="/canditprofile" />
             <Route element={<FormularioEmp />} path="/empprofile" />
-            <Route element={<Candidato />} path="/candidatos" />
             <Route element={<Single />} path="/single/:theid" />
             <Route element={<h1>Not found!</h1>} />
           </Routes>

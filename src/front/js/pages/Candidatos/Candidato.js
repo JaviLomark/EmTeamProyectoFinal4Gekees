@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { Context } from "../store/appContext";
-import "../../styles/perfilCandidatoStyles.css";
+import { Context } from "../../store/appContext";
+// import "../pages/Candidatos/Candidato.css";
 
 // div.row me define la etiqueta mas la clase
 // div*3 me define 3 div uno bajo el otro
 // div.col-12 me define un define una columna con 12
 
-const PerfilCandidato = () => {
+export const Candidato = () => {
   return (
     <div className="container-fluid">
       <div className="filaPrincipal row">
@@ -71,5 +71,3 @@ const PerfilCandidato = () => {
     </div>
   );
 };
-
-export default PerfilCandidato;
