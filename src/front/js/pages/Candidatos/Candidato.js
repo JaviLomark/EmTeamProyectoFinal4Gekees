@@ -40,7 +40,7 @@ export const Candidato = () => {
           <div
             className="modal fade"
             id="modalContacto"
-            tabindex="-1"
+            tabIndex="-1"
             aria-labelledby="modalContactoLabel"
             aria-hidden="true"
           >

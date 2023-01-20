@@ -1,6 +1,6 @@
 import config from "./config";
 
-export const onPrivate = (setDisabled, navigate, { namePage }) => {
+export const onPrivate = (setDisabled, navigate) => {
   const tokenOBJ = localStorage.token;
   if (!tokenOBJ) {
     navigate("/");
@@ -9,7 +9,7 @@ export const onPrivate = (setDisabled, navigate, { namePage }) => {
 
   const tokenData = JSON.parse(tokenOBJ);
 
-  fetch(`${config.HOSTNAME}/api/${namePage}`, {
+  fetch(`${config.HOSTNAME}/api/private`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${tokenData.token}`,
@@ -22,3 +22,6 @@ export const onPrivate = (setDisabled, navigate, { namePage }) => {
       setDisabled(false);
     });
 };
+
+// ${namePage}
+// , { namePage }

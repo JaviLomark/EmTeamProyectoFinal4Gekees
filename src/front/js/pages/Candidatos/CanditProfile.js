@@ -13,7 +13,7 @@ export const FormularioCandit = () => {
 
   return (
     <div className="container-fluid p-0">
-      <h1 className="miPerfil d-flex justify-content-center p-3 mb-2 bg-warning">
+      <h1 className="d-flex justify-content-center p-3 mb-2 bg-warning">
         Mi perfil
       </h1>
       <form>
@@ -35,7 +35,7 @@ export const FormularioCandit = () => {
             type="checkbox"
             role="switch"
             id="habilitar-deshabilitar"
-            checked
+            defaultChecked
           />
           <label
             className="form-check-label ms-1"
@@ -77,7 +77,7 @@ export const FormularioCandit = () => {
             <div className="mt-3">
               Provincia
               <select className="form-select mt-2" aria-label="provincias">
-                <option selected>Provincia</option>
+                <option defaultValue>Provincia</option>
                 <option value="madrid">Madrid</option>
                 <option value="barcelona">Barcelona</option>
                 <option value="bilbao">Bilbao</option>

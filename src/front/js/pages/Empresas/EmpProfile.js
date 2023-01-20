@@ -13,7 +13,7 @@ export const FormularioEmp = () => {
 
   return (
     <div className="container-fluid p-0">
-      <h1 className="miPerfil d-flex justify-content-center p-3 mb-2 bg-warning">
+      <h1 className="d-flex justify-content-center p-3 mb-2 bg-warning">
         Mi perfil
       </h1>
       <form>

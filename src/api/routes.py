@@ -27,6 +27,13 @@ bcrypt = Bcrypt(app)
 def sitemap():
     return generate_sitemap(app)
 
+@api.route('/private', methods=['GET'])
+@jwt_required()
+def private():
+    data = get_jwt_identity()
+    print(data)
+    return jsonify(data)
+
 @api.route('/signup', methods=['POST'])
 def signup():
     body = request.get_json()
