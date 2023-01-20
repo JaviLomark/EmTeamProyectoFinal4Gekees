@@ -32,7 +32,7 @@ class Tipo_Empleo(db.Model):
     def serialize(self):
         return{
             "id": self.id,
-            "NEmpleo": self.label
+            "NEmpleo": self.NEmpleo
         }
 
 class Provincia(db.Model):
@@ -43,7 +43,18 @@ class Provincia(db.Model):
     def serialize(self):
         return{
             "id": self.id,
-            "Nprovincia": self.label
+            "Nprovincia": self.Nprovincia
+        }
+
+class PuestoTrabajo(db.Model):
+    __tablename__ = "PuestoTrabajo"
+
+    id = db.Column(db.Integer, primary_key=True)
+    NTrabajo = db.Column(db.String(120), unique=False, nullable=False)
+    def serialize(self):
+        return{
+            "id": self.id,
+            "NTrabajo": self.NTrabajo
         }
 
 class Candidato(db.Model):
@@ -54,7 +65,8 @@ class Candidato(db.Model):
     nombre = db.Column(db.String(120), unique=False, nullable=False)
     primer_apellido = db.Column(db.String(120), unique=False, nullable=False)
     segundo_apellido = db.Column(db.String(120), unique=False, nullable=False)
-    puesto_trab = db.Column(db.String(120), unique=False, nullable=False)
+    puesto_trabajo = db.Column(db.Integer, db.ForeignKey('PuestoTrabajo.id'), unique=False, nullable=False)
+    puestos = db.relationship(PuestoTrabajo)
     telefono = db.Column(db.Integer, unique=False, nullable=True)
     experiencia = db.Column(db.String(120), unique=False, nullable=False)
     cv = db.Column(db.String(120), unique=False, nullable=True)
@@ -82,6 +94,22 @@ class Candidato(db.Model):
             "tipo_emp": self.tipo_emp,
             "provincia": self.provincia,
             "usuario_id": self.usuario_id
+        }
+
+class CandidatoEmp(db.Model):
+    __tablename__ = "CandidatoEmp"
+
+    id = db.Column(db.Integer, primary_key=True)
+    IdTipoEmp = db.Column(db.Integer, db.ForeignKey('Tipo_Empleo.id'), unique=False, nullable=False)
+    tipoEmp = db.relationship(Tipo_Empleo)
+    IdCandidato = db.Column(db.Integer, db.ForeignKey('Candidato.id'), unique=False, nullable=False)
+    candidatos = db.relationship(Candidato)
+    
+    def serialize(self):
+        return{
+            "id": self.id,
+            "IdTipoEmp": self.IdTipoEmp,
+            "IdCandidato": self.IdCandidato
         }
 
 class Sector(db.Model):

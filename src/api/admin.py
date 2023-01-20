@@ -9,6 +9,8 @@ from .models import db, Candidato
 from .models import db, Sector
 from .models import db, Empresa
 from .models import db, Me_Gusta
+from .models import db, PuestoTrabajo
+from .models import db, CandidatoEmp
 from flask_admin.contrib.sqla import ModelView
 
 def setup_admin(app):
@@ -26,6 +28,8 @@ def setup_admin(app):
     admin.add_view(ModelView(Sector, db.session))
     admin.add_view(ModelView(Empresa, db.session))
     admin.add_view(ModelView(Me_Gusta, db.session))
+    admin.add_view(ModelView(PuestoTrabajo, db.session))
+    admin.add_view(ModelView(CandidatoEmp, db.session))
 
     # You can duplicate that line to add mew models
     # admin.add_view(ModelView(YourModelName, db.session))

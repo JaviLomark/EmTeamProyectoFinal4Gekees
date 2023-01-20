@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Usuario, Candidato
+from api.models import db, User, Usuario, Candidato, Provincia, PuestoTrabajo
 from api.utils import generate_sitemap, APIException
 from flask_bcrypt import Bcrypt
 
@@ -106,6 +106,54 @@ def login():
 @api.route('/usuario/<int:id>/', methods=['DELETE'])
 def usuario(id):
    return jsonify({"msg":"Perfil eliminado", "data": None}), 201
+
+@api.route('/provincias', methods=['GET'])
+def get_provincias():
+
+    provincias = Provincia.query.all()
+    data = [provincia.serialize() for provincia in provincias]
+    return jsonify(data)
+
+@api.route('/puestosTrabajo', methods=['GET'])
+def get_puestosTrabajo():
+
+    puestosTrabajo = PuestoTrabajo.query.all()
+    data = [puestoTrabajo.serialize() for puestoTrabajo in puestosTrabajo]
+    return jsonify(data)
+
+@api.route('/candidato/<int:id>/', methods=['POST'])
+@jwt_required()
+def editar_candidato(id):
+    data = get_jwt_identity()
+    body = request.get_json()
+    nombre = body.get('nombre')
+    primer_apellido = body.get('primer_apellido')
+    segundo_apellido = body.get('segundo_apellido')
+    puesto_trab = body.get('puesto_trab')
+    telefono = body.get('telefono')
+    experiencia = body.get('experiencia')
+    cv = body.get('cv')
+    carta_presen = body.get('carta_presen')
+    tipo_emp = body.get('tipo_emp')
+    provincia = body.get('provincia')
+
+@api.route('/empresa/<int:id>/', methods=['POST'])
+@jwt_required()
+def editar_empresa(id):
+    data = get_jwt_identity()
+    body = request.get_json()
+    nombreEmpresa = body.get('nombreEmpresa')
+    NumeroTrabajadores = body.get('NumeroTrabajadores')
+    ubicacion = body.get('ubicacion')
+    tipo_emp = body.get('tipo_emp')
+    telefono = body.get('telefono')
+    sector = body.get('sector')
+    indentificacion_fiscal = body.get('indentificacion_fiscal')
+    descripcion = body.get('descripcion')
+
+
+
+
 
 # @api.route('/candidato/<int:id>/', methods=['GET'])
 # @jwt_required()
