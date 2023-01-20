@@ -6,6 +6,7 @@ import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import { Candidato } from "./pages/Candidatos/Candidato";
+import { ListadoCandidatos } from "./pages/Candidatos/ListadoCandidatos";
 import { FormularioCandit } from "./pages/Candidatos/CanditProfile";
 import { FormularioEmp } from "./pages/Empresas/EmpProfile";
 
@@ -27,6 +28,7 @@ const Layout = () => {
           <Navbar />
           <Routes>
             <Route element={<Candidato />} path="/candidato" />
+            <Route element={<ListadoCandidatos />} path="/listado-candidatos" />
             <Route element={<Home />} path="/" />
             <Route element={<Demo />} path="/demo" />
             <Route element={<FormularioCandit />} path="/canditprofile" />

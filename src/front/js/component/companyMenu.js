@@ -7,6 +7,7 @@ export const CompanyMenu = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
+
   return (
     <div>
       <div className="btn-group me-2">
@@ -25,7 +26,7 @@ export const CompanyMenu = () => {
             </a>
           </li>
           <li>
-            <a className="dropdown-item" href="#">
+            <a className="dropdown-item" href="/listado-candidatos">
               Buscar candidatos
             </a>
           </li>

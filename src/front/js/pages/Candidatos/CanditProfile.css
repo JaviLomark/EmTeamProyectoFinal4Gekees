@@ -1,11 +1,11 @@
-.MiPerfil {
+/* .MiPerfil {
   background-color: rgba(254, 193, 64, 1);
   text-align: center;
   padding-top: 15px;
   padding-bottom: 15px;
-}
+} */
 
-.switch {
+/* .switch {
   position: relative;
   display: inline-block;
   width: 40px;
@@ -58,8 +58,8 @@
   left: -999px;
   position: absolute;
   left: -999px;
-}
-#avatar {
+} */
+/* #avatar {
   height: 25rem;
   margin-bottom: 1rem;
   position: relative;
@@ -89,4 +89,4 @@
   float: right;
   display: flex;
   flex-direction: column;
-}
+} */

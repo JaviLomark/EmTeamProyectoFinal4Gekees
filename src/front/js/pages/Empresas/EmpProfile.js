@@ -11,96 +11,102 @@ export const FormularioEmp = () => {
     onPrivate(setDisabled, navigate, { namePage: "empprofile" });
   }, [disabled]);
 
-  // if (disabled) {
-  //   <div className="d-flex justify-content-center">
-  //     <div className="spinner-grow text-warning" role="status"></div>
-  //   </div>;
-  // }
-
   return (
-    <div>
-      <h1 className="MiPerfil">Mi perfil</h1>
+    <div className="container-fluid p-0">
+      <h1 className="miPerfil d-flex justify-content-center p-3 mb-2 bg-warning">
+        Mi perfil
+      </h1>
       <form>
-        <div className="mb-3">
-          <input type="image" className="form-control" id="logoempresa" />
+        <div id="avatar" className="d-flex justify-content-center">
+          <img
+            src="https://res.cloudinary.com/dzpvz1nag/image/upload/v1673638486/image_1_zapzbe.png"
+            className="img-fluid"
+            style={{ width: "16rem" }}
+          />
         </div>
-
-        <div className="mb-3">
-          <label for="nombre" className="form-label">
-            Nombre de la empresa
-          </label>
-          <input type="text" className="form-control" id="nombre" />
+        <div className="d-flex justify-content-center">
+          <button type="submit" className="btn btn-primary m-1 p-1">
+            Cambiar foto
+          </button>
         </div>
-
-        <div className="mb-3">
-          <label for="ntrabajadores" className="form-label">
-            Numero de trabajadores
-          </label>
-          <input type="text" className="form-control" id="ntrabajadores" />
-        </div>
-
-        <div className="mb-3">
-          <label for="Ubicacion" className="form-label">
-            Ubicacion
-          </label>
-          <input type="text" className="form-control" id="Ubicacion" />
-        </div>
-
-        <div className="mb-3">
-          <label for="tipoempleo" className="form-label">
-            Tipo de empleo
-          </label>
-          <input type="text" className="form-control" id="tipoempleo" />
-        </div>
-
-        <div className="mb-3">
-          <label for="Sede" className="form-label">
-            Sede
-          </label>
-          <input type="text" className="form-control" id="Sede" />
-        </div>
-
-        <div className="mb-3">
-          <label for="Telefono" className="form-label">
-            Telefono
-          </label>
-          <input type="text" className="form-control" id="Telefono" />
-        </div>
-
-        <div className="mb-3">
-          <label for="Sector" className="form-label">
-            Sector
-          </label>
-          <input type="text" className="form-control" id="Sector" />
-        </div>
-
-        <div className="mb-3">
-          <label for="idf" className="form-label">
-            Identificacion fiscal (C.I.F o N.I.F)
-          </label>
-          <input type="text" className="form-control" id="idf" />
-        </div>
-
-        <div className="mb-3">
-          <label for="experiencia" className="form-label">
-            Experiencia
-          </label>
-          <input type="text" className="form-control" id="experiencia" />
-        </div>
-
-        <div className="mb-3">
-          <label for="Descripcion" className="form-label">
+        {/* Columna derecha/izquierda */}
+        <div className="row justify-content-center m-5 fw-bold">
+          {/* Columna izquierda */}
+          <div className="col-md-4">
+            <div className="mt-3">
+              <label htmlFor="nombre-empresa" className="form-label">
+                Nombre de la empresa*
+              </label>
+              <input type="text" className="form-control" id="nombre-empresa" />
+            </div>
+            <div className="mt-3">
+              <label htmlFor="ubicacion" className="form-label">
+                Ubicación
+              </label>
+              <input type="text" className="form-control" id="ubicacion" />
+            </div>
+            <div className="mt-3">
+              <label htmlFor="numero-trabajadores" className="form-label">
+                Numero de trabajadores
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="numero-trabajadores"
+              />
+            </div>
+            <div className="mt-3">
+              <label htmlFor="sede" className="form-label">
+                Sede
+              </label>
+              <input type="text" className="form-control" id="sede" />
+            </div>
+          </div>
+          {/* Columna derecha */}
+          <div className="col-md-4">
+            <div className="mt-3">
+              <label htmlFor="tipo-trabajo" className="form-label">
+                Tipo de Trabajo
+              </label>
+              <input type="text" className="form-control" id="tipo-trabajo" />
+            </div>
+            <div className="mt-3">
+              <label htmlFor="sector" className="form-label">
+                Sector
+              </label>
+              <input type="text" className="form-control" id="sector" />
+            </div>
+            <div className="mt-3">
+              <label htmlFor="telefono" className="form-label">
+                Télefono
+              </label>
+              <input type="text" className="form-control" id="telefono" />
+            </div>
+            <div className="mt-3">
+              <label htmlFor="identificacion-fiscal" className="form-label">
+                Identificacion fiscal
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="identificacion-fiscal"
+              />
+            </div>
+          </div>
+          <div className="form-floating col-md-8 mt-3">
+            <label htmlFor="descripcion"></label>
             Descripcion
-          </label>
-          <textarea
-            type="text"
-            className="form-control"
-            id="Descripcion"
-          ></textarea>
+            <textarea
+              className="form-control"
+              type="text-area"
+              id="descripcion"
+              style={{ height: "10rem" }}
+            ></textarea>
+          </div>
+          <button type="submit" className="btn btn-primary mt-3 col-5">
+            GUARDAR
+          </button>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Guardar
-        </button>
       </form>
     </div>
   );
