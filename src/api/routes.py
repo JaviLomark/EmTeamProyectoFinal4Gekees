@@ -27,13 +27,6 @@ bcrypt = Bcrypt(app)
 def sitemap():
     return generate_sitemap(app)
 
-@api.route('/private', methods=['GET'])
-@jwt_required()
-def private():
-    data = get_jwt_identity()
-    print(data)
-    return jsonify(data)
-
 @api.route('/signup', methods=['POST'])
 def signup():
     body = request.get_json()
@@ -104,10 +97,15 @@ def login():
     # Solo si el usuario es candidato OJOOOOOOOO
     # candidatos = Candidato.query.filter_by(usuario_id=user.id).first()
     # candidato = candidatos[0]
-
+    
+    rol = "candidato" if user.candidato else "empresa" 
     token = create_access_token(
-        identity={"rol": "usuario", "data": user.serialize()})
-    return jsonify({"msg": None, "data": token})
+        identity={"rol": rol, "data": user.serialize()})
+    return jsonify({"msg": None, "data": { "token": token, "rol": rol }})
+
+@api.route('/usuario/<int:id>/', methods=['DELETE'])
+def usuario(id):
+   return jsonify({"msg":"Perfil eliminado", "data": None}), 201
 
 # @api.route('/candidato/<int:id>/', methods=['GET'])
 # @jwt_required()
@@ -172,11 +170,7 @@ def login():
 #     usuario.Id = usuario.query.get(usuario_id)
 #     print(usuario.Id)
 #     return jsonify(usuarioId.serialize()), 200
-    
-# @api.route('/empresa/<int:id>/', methods=['DELETE'])
-# @jwt_required()
-# def eliminar_empresa(id):
-#    return jsonify({"msg":"Perfil empresa eliminado", "data": None}), 200
+
 
 # @app.route('/candidatos', methods=['GET'])
 # def lista_candidatos():
@@ -195,3 +189,10 @@ def login():
 #     usuario.Id = usuario.query.get(usuario_id)
 #     print(usuario.Id)
 #     return jsonify(usuarioId.serialize()), 200
+
+# @api.route('/private', methods=['GET'])
+# @jwt_required()
+# def private():
+#     data = get_jwt_identity()
+#     print(data)
+#     return jsonify(data)

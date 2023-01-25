@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
+      rol: "",
       message: null,
       demo: [
         {
@@ -19,6 +20,10 @@ const getState = ({ getStore, getActions, setStore }) => {
       // Use getActions to call a function within a fuction
       exampleFunction: () => {
         getActions().changeColor(0, "green");
+      },
+
+      setRol: (rol) => {
+        setStore({ rol: rol });
       },
 
       getMessage: async () => {

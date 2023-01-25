@@ -41,7 +41,7 @@ export const FormularioCandit = () => {
             className="form-check-label ms-1"
             htmlFor="habilitar-deshabilitar"
           >
-            Habilitar/Deshabilitar
+            Ocultar perfil
           </label>
         </div>
         {/* Columna derecha/izquierda */}
@@ -84,10 +84,10 @@ export const FormularioCandit = () => {
               </select>
             </div>
             <div className="mt-3">
-              <label htmlFor="puestotrabajo" className="form-label">
+              <label htmlFor="puesto-trabajo" className="form-label">
                 Puesto de trabajo
               </label>
-              <input type="text" className="form-control" id="puestotrabajo" />
+              <input type="text" className="form-control" id="puesto-trabajo" />
             </div>
           </div>
           {/* Columna derecha */}

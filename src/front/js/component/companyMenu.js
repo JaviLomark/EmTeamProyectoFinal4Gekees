@@ -5,6 +5,7 @@ export const CompanyMenu = () => {
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("rol");
     navigate("/");
   };
 
@@ -31,9 +32,7 @@ export const CompanyMenu = () => {
             </a>
           </li>
           <li>
-            <a className="dropdown-item" href="#">
-              Eliminar cuenta
-            </a>
+            <a className="dropdown-item">Eliminar cuenta</a>
           </li>
           <hr className="dropdown-divider" />
           <li>

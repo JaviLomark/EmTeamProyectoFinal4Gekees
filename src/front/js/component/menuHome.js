@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
+// import { Context } from "../store/appContext";
 import config from "../config";
 import { useNavigate } from "react-router-dom";
 
 export const MenuHome = () => {
+  // const { store, actions } = useContext(Context);
   const navigate = useNavigate();
   const onRegistro = async () => {
     const email = document.getElementById("email-registro").value;
@@ -81,8 +83,11 @@ export const MenuHome = () => {
 
     const data = await res.json();
     if (res.status == 200) {
-      const token = data.data;
+      const token = data.data.token;
       localStorage.token = JSON.stringify({ token });
+      const rol = data.data.rol;
+      localStorage.setItem("rol", rol);
+      // actions.setRol(rol);
       const btnCerrar = document.getElementById("cerrar-modal-acceso");
       btnCerrar.click();
       navigate("/canditprofile"); //TODO: Echarle un ojo

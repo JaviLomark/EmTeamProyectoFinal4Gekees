@@ -1,11 +1,33 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import config from "../config";
 
 export const CandidateMenu = () => {
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("rol");
     navigate("/");
+  };
+
+  const eliminarPerfil = async () => {
+    const body = JSON.stringify(usuario.id);
+    const res = await fetch(`${config.HOSTNAME}/api/usuario/<int:id>/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body,
+    });
+
+    const data = await res.json();
+    const mensaje = confirm("¿Quieres eliminar tu perfil?");
+    if (mensaje) {
+      alert("Perfil eliminado");
+    } else {
+      alert("Tu perfil NO se ha eliminado");
+    }
+    return;
   };
 
   return (
@@ -26,7 +48,7 @@ export const CandidateMenu = () => {
             </a>
           </li>
           <li>
-            <a className="dropdown-item" href="#">
+            <a className="dropdown-item" onClick={eliminarPerfil}>
               Eliminar cuenta
             </a>
           </li>
