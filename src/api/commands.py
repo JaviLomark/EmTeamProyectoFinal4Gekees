@@ -1,6 +1,6 @@
 
 import click
-from api.models import db, User
+from api.models import db, User, Tipo_Empleo, Provincia, Sector, PuestoTrabajo
 
 """
 In this file, you can add as many commands as you want using the @app.cli.command decorator
@@ -28,5 +28,21 @@ def setup_commands(app):
             print("User: ", user.email, " created.")
 
         print("All test users created")
+
+
+    """ 
+    This is an example command "insert_tipo_empleo" that you can run from the command line
+    by typing: $ flask insert_tipo_empleo
+    """
+    @app.cli.command("insert_tipo_empleo") # name of our command
+    def insert_tipo_empleo():
+        print("Creating test Tipo_Empleo")
+        tipos = ['remoto', 'hibrido', 'presencial']
+        for name in tipos:
+            tipo_emple = Tipo_Empleo(NEmpleo=name)
+            db.session.add(tipo_emple)
+            db.session.commit()
+
+        print("All test Tipo_Empleo created")
 
         ### Insert the code to populate others tables if needed

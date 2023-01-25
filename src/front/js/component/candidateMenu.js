@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../config";
+import { Context } from "../store/appContext";
 
 export const CandidateMenu = () => {
+  const { store } = useContext(Context);
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("token");
@@ -43,7 +45,10 @@ export const CandidateMenu = () => {
         </button>
         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-start">
           <li>
-            <a className="dropdown-item" href="/canditprofile">
+            <a
+              className="dropdown-item"
+              href={`/canditprofile/${store.userId}`}
+            >
               Editar perfil
             </a>
           </li>

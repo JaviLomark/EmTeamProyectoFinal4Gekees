@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Usuario, Candidato, Provincia, PuestoTrabajo
+from api.models import db, User, Usuario, Candidato, Provincia, PuestoTrabajo, Empresa
 from api.utils import generate_sitemap, APIException
 from flask_bcrypt import Bcrypt
 
@@ -34,7 +34,7 @@ def signup():
     email = body.get("email")
     passwordNew = body.get("passwordNew")
     passwordRepeat = body.get("passwordRepeat")
-    # esCandidato = body.get('candidato')
+    esCandidato = body.get('candidato')
 
     if email is None or passwordNew is None or passwordRepeat is None:
         return jsonify({"msg": "Por favor, rellena los campos", "data": None}), 400
@@ -56,13 +56,50 @@ def signup():
     user = Usuario(
         email = email,
         password = hash.decode('utf-8'),
-        candidato = False # body.get('candidato')
+        candidato = esCandidato
     )
-
-    print(body)
 
     db.session.add(user)
     db.session.commit()
+
+    if user.candidato: 
+        candidato = Candidato(
+            avatar = '',
+            nombre = '',
+            primer_apellido = '',
+            segundo_apellido = '',
+            puesto_trabajo = 1, # ojo
+            telefono = 0,
+            experiencia = '',
+            cv = '',
+            carta_presen = '',
+            tipo_emp = 1, #ojo
+            provincia = 1, # provincia_id
+            usuario_id = user.id,
+            es_visible = True, # OJO
+        )
+        db.session.add(candidato)
+        db.session.commit()
+    else:
+        empresa = Empresa(
+            avatar = '',
+            nombre_emp = '',
+            numero_trab = 0,
+            ubicacion = '',
+            tipo_trab = 1, # ojo 
+            sede = '',
+            telefono = '',
+            sector = 1, # ojo 
+            indentificacion_fiscal = '',
+            descripcion = '',
+            usuario_id = user.id
+        )
+        db.session.add(empresa)
+        db.session.commit()
+
+    print(body)
+
+    
 
     return jsonify({"msg": None, "data": user.serialize()}), 201
 
@@ -101,7 +138,7 @@ def login():
     rol = "candidato" if user.candidato else "empresa" 
     token = create_access_token(
         identity={"rol": rol, "data": user.serialize()})
-    return jsonify({"msg": None, "data": { "token": token, "rol": rol }})
+    return jsonify({"msg": None, "data": { "userId": user.id, "token": token, "rol": rol }})
 
 @api.route('/usuario/<int:id>/', methods=['DELETE'])
 def usuario(id):
@@ -155,29 +192,21 @@ def editar_empresa(id):
 
 
 
-# @api.route('/candidato/<int:id>/', methods=['GET'])
-# @jwt_required()
-# def editar_candidato(id):
-#     data = get_jwt_identity()
-#     if data["rol"] == "usuario":
-#         print(data)
-#     return jsonify(data)
-#     body = request.get_json()
-#     avatar = body.get('avatar')
-#     nombre = body.get('nombre')
-#     primer_apellido = body.get('primer_apellido')
-#     segundo_apellido = body.get('segundo_apellido')
-#     puesto_trab = body.get('puesto_trab')
-#     telefono = body.get('telefono')
-#     experiencia = body.get('experiencia')
-#     cv = body.get('cv')
-#     carta_presen = body.get('carta_presen')
-#     tipo_emp = body.get('tipo_emp')
-#     empleos = body.get('empleos')
-#     provincia = body.get('provincia')
-#     usuario = body.get('usuario')
+@api.route('/candidato/<int:id>/', methods=['GET'])
+@jwt_required()
+def obtener_candidato(id):
+    
+    users = User.query.filter_by(id=id)
+    if len(users) == 0:
+        return jsonify({"msg":"User no encontrado", "data": None}), 404
 
-#     return jsonify({"msg":"Candidato no encontrado", "data": None}), 200
+    user = users[0]
+    candidatos = Candidato.query.filter_by(usuario_id=user.id)
+    if len(candidatos) == 0:
+        return jsonify({"msg":"Candidato no encontrado", "data": None}), 404
+    candidato = candidatos[0]
+
+    return jsonify({"msg":"Candidato no encontrado", "data": candidato}), 200
 
 # @api.route('/candidato/<int:id>/', methods=['PUT'])
 # @jwt_required()

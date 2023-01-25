@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-// import { Context } from "../store/appContext";
+import { Context } from "../store/appContext";
 import config from "../config";
 import { useNavigate } from "react-router-dom";
 
 export const MenuHome = () => {
-  // const { store, actions } = useContext(Context);
+  const { store, actions } = useContext(Context);
   const navigate = useNavigate();
   const onRegistro = async () => {
     const email = document.getElementById("email-registro").value;
@@ -25,11 +25,12 @@ export const MenuHome = () => {
       alert("Por favor, crea una contraseña");
       return;
     }
-
+    const candidato = !document.getElementById("CheckEmpresa").checked;
     const body = JSON.stringify({
       email,
       passwordNew,
       passwordRepeat,
+      candidato,
     });
 
     const res = await fetch(`${config.HOSTNAME}/api/signup`, {
@@ -86,11 +87,19 @@ export const MenuHome = () => {
       const token = data.data.token;
       localStorage.token = JSON.stringify({ token });
       const rol = data.data.rol;
+      const userId = data.data.userId;
       localStorage.setItem("rol", rol);
-      // actions.setRol(rol);
+      localStorage.setItem("userId", userId);
       const btnCerrar = document.getElementById("cerrar-modal-acceso");
       btnCerrar.click();
-      navigate("/canditprofile"); //TODO: Echarle un ojo
+
+      actions.setRol(rol);
+      actions.setUserId(userId);
+      if (rol === "empresa") {
+        navigate(`/empprofile/${userId}`);
+      } else if (rol === "candidato") {
+        navigate(`/canditprofile/${userId}`);
+      }
     } else {
       alert(data.msg);
     }
