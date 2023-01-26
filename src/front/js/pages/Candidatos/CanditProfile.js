@@ -20,38 +20,108 @@ const formularioTemplate = {
 export const FormularioCandit = () => {
   const [disabled, setDisabled] = useState(true);
   const navigate = useNavigate();
-  // const [formulario, setFormulario] = useState(formularioTemplate);
-  // const [nombre, insertarNombre] = useState([]);
-  // const [primerApellido, insertarApellido1] = useState([]);
-  // const [segundoApellido, insertarApellido2] = useState([]);
-  // const [puestoTrabajo, insertarpuestoTrabajo] = useState([]);
-  // const [telefono, insertarTelefono] = useState([]);
-  // const [experiencia, insertarExperiencia] = useState([]);
-  // const [cv, insertarCv] = useState([]);
-  // const [cartaPresentacion, insertarcartaPresentacion] = useState([]);
-  // const [tipoEmpleo, insertarTipoEmpleo] = useState([]);
-  // const [provincia, insertarProvincia] = useState([]);
+  const [formulario, setFormulario] = useState(formularioTemplate);
+  const [nombre, insertarNombre] = useState([]);
+  const [primerApellido, insertarApellido1] = useState([]);
+  const [segundoApellido, insertarApellido2] = useState([]);
+  const [puestoTrabajo, insertarPuestoTrabajo] = useState([]);
+  const [telefono, insertarTelefono] = useState([]);
+  const [experiencia, insertarExperiencia] = useState([]);
+  const [cv, insertarCv] = useState([]);
+  const [cartaPresentacion, insertarCartaPresen] = useState([]);
+  const [tipoEmpleo, insertarTipoEmpleo] = useState([]);
+  const [provincia, insertarProvincia] = useState([]);
 
-  useEffect(async () => {
+  // ------ORIGINAL------
+
+  // useEffect(async () => {
+  //   onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
+  //   const res = await fetch(`${config}/canditprofile/${params.uid}`);
+  //   fetch(`${config}/canditprofile/${params.uid}`, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((resp) => {
+  //       return resp.json();
+  //     })
+  //     .then((respJSON) => {
+  //       console.log(respJSON);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [disabled]);
+
+  // ------CON RETURN------
+
+  // useEffect(() => {
+  //   return async () => {
+  //     onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
+  //     const res = await fetch(`${config}/canditprofile/${params.uid}`);
+  //     fetch(`${config}/canditprofile/${params.uid}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //       .then((resp) => {
+  //         return resp.json();
+  //       })
+  //       .then((respJSON) => {
+  //         console.log(respJSON);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   };
+  // }, [disabled]);
+
+  // ------FUNCION DENTRO + CREANDO CONSTANTE------
+
+  // useEffect(() => {
+  //   onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
+  //   const fetchCandit = async () => {
+  //     const initialCandit = await fetch(
+  //       `${config}/canditprofile/${params.uid}`
+  //     );
+  //     setCandit(initialCandit);
+  //     fetchCandit();
+  //     fetch(`${config}/canditprofile/${params.uid}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //   };
+  // }, [disabled]);
+
+  // ------SACANDO FUNCION Y LLAMANDOLA------
+
+  useEffect(() => {
     onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
-
-    const res = await fetch(`${config}/canditprofile/${params.uid}`);
-    // fetch(`${config}/canditprofile/${params.uid}`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((resp) => {
-    //     return resp.json();
-    //   })
-    //   .then((respJSON) => {
-    //     console.log(respJSON);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    fetchCandit();
   }, [disabled]);
+
+  const fetchCandit = async () => {
+    const res = await fetch(`${config}/canditprofile/${params.id}`);
+    fetch(`${config}/canditprofile/${params.uid}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => {
+        return resp.json();
+      })
+      .then((respJSON) => {
+        console.log(respJSON);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="container-fluid p-0">
@@ -94,10 +164,15 @@ export const FormularioCandit = () => {
               <label htmlFor="nombre" className="form-label">
                 Nombre*
               </label>
-              <input type="text" className="form-control" id="nombre" />
+              <input
+                type="text"
+                className="form-control"
+                id="nombre"
+                required
+              />
             </div>
             <div className="mt-3">
-              <label htmlFor="primer-apellido" className="form-label">
+              <label htmlFor="primer-apellido" className="form-label" required>
                 Primer apellido*
               </label>
               <input
@@ -107,8 +182,8 @@ export const FormularioCandit = () => {
               />
             </div>
             <div className="mt-3">
-              <label htmlFor="segundo-apellido" className="form-label">
-                Segundo apellido
+              <label htmlFor="segundo-apellido" className="form-label" required>
+                Segundo apellido*
               </label>
               <input
                 type="text"
@@ -117,20 +192,41 @@ export const FormularioCandit = () => {
               />
             </div>
             <div className="mt-3">
-              Provincia
-              <select className="form-select mt-2" aria-label="provincias">
+              Provincia*
+              <select
+                className="form-select mt-2"
+                aria-label="provincias"
+                required
+              >
                 <option defaultValue>Selecciona una provincia</option>
                 <option value="madrid">Madrid</option>
                 <option value="barcelona">Barcelona</option>
                 <option value="bilbao">Bilbao</option>
               </select>
             </div>
+            <div className="mt-3">
+              Tipo de trabajo*
+              <select
+                className="form-select mt-2"
+                aria-label="tipoTrabajo"
+                required
+              >
+                <option defaultValue>Selecciona un tipo de trabajo</option>
+                <option value="remoto">Remoto</option>
+                <option value="presencial">Presencial</option>
+                <option value="hibrido">Hibrido</option>
+              </select>
+            </div>
           </div>
           {/* Columna derecha */}
           <div className="col-md-4">
             <div className="mt-3">
-              Puesto de trabajo
-              <select className="form-select mt-2" aria-label="provincias">
+              Puesto de trabajo*
+              <select
+                className="form-select mt-2"
+                aria-label="provincias"
+                required
+              >
                 <option defaultValue>Selecciona un puesto de trabajo</option>
                 <option value="Desarrollador">Desarrollador</option>
                 <option value="Junior">Junior</option>
@@ -139,71 +235,49 @@ export const FormularioCandit = () => {
             </div>
             <div className="mt-3">
               <label htmlFor="telefono" className="form-label">
-                Télefono
+                Télefono*
               </label>
-              <input type="text" className="form-control" id="telefono" />
+              <input
+                type="text"
+                className="form-control"
+                id="telefono"
+                required
+              />
             </div>
             <div className="mt-3">
               <label htmlFor="experiencia" className="form-label">
-                Experiencia
+                Experiencia*
               </label>
-              <input type="text" className="form-control" id="experiencia" />
+              <input
+                type="text"
+                className="form-control"
+                id="experiencia"
+                required
+              />
             </div>
             <div className="mt-3">
               <label htmlFor="email" className="form-label">
-                Email
+                Email*
               </label>
-              <input type="email" className="form-control" id="email" />
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                required
+              />
             </div>
             <div className="mt-3">
               <label htmlFor="cv" className="form-label">
-                C.V
+                C.V*
               </label>
-              <input type="file" className="form-control" id="cv" />
-            </div>
-          </div>
-          <div className="mt-3 d-flex justify-content-center">
-            <div className="">
-              <span className="mt-1">Tipo de trabajo</span>
-              <div className="form-check m-1">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="hibrido"
-                />
-                <label className="form-check-label" htmlFor="hibrido">
-                  Hibrido
-                </label>
-              </div>
-              <div className="form-check m-1">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="remoto"
-                />
-                <label className="form-check-label" htmlFor="remoto">
-                  Remoto
-                </label>
-              </div>
-              <div className="form-check m-1">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="presencial"
-                />
-                <label className="form-check-label" htmlFor="presencial">
-                  Presencial
-                </label>
-              </div>
+              <input type="file" className="form-control" id="cv" required />
             </div>
           </div>
           <div className="form-floating col-md-8 mt-3">
             <label htmlFor="carta-presentacion"></label>
-            Carta de presentación
+            Carta de presentación*
             <textarea
+              required
               className="form-control"
               type="text-area"
               style={{ height: "10rem" }}

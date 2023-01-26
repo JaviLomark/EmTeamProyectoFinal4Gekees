@@ -37,7 +37,7 @@ def setup_commands(app):
     @app.cli.command("insert_tipo_empleo") # name of our command
     def insert_tipo_empleo():
         print("Creating test Tipo_Empleo")
-        tipos = ['remoto', 'hibrido', 'presencial']
+        tipos = ['Remoto', 'Hibrido', 'Presencial']
         for name in tipos:
             tipo_emple = Tipo_Empleo(NEmpleo=name)
             db.session.add(tipo_emple)
@@ -46,3 +46,53 @@ def setup_commands(app):
         print("All test Tipo_Empleo created")
 
         ### Insert the code to populate others tables if needed
+
+
+    """ 
+    This is an example command "insert_provincia" that you can run from the command line
+    by typing: $ flask insert_provincia
+    """
+    @app.cli.command("insert_provincia") # name of our command
+    def insert_provincia():
+        print("Creating test Provincia")
+        nombres = ['Alicante', 'Albacete', 'Almería', 'Álava', 'Asturias', 'Ávila', 'Badajoz', 'Barcelona', 'Coruña', 'Burgos', 'Cáceres', 'Cádiz', 'Cantabria', 'Castellón', 'Ceuta', 'Ciudad Real', 'Córdoba', 'Cuenca', 'Guipúzcoa', 'Gerona', 'Granada', 'Guadalajara', 'Huelva', 'Huesca', 'Islas Baleares', 'Jaén', 'La Rioja', 'Las Palmas', 'León', 'Lleida', 'Lugo', 'Madrid', 'Málaga', 'Melilla', 'Murcia', 'Navarra', 'Orense', 'Palencia', 'Pontevedra', 'Salamanca', 'Santa Cruz de Tenerife', 'Segovia', 'Sevilla', 'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza']
+        for name in nombres:
+            provincia = Provincia(Nprovincia=name)
+            db.session.add(provincia)
+            db.session.commit()
+
+        print("All test Provincia created")
+
+
+    """ 
+    This is an example command "insert_sector" that you can run from the command line
+    by typing: $ flask insert_sector
+    """
+    @app.cli.command("insert_sector") # name of our command
+    def insert_sector():
+        print("Creating test Sector")
+        tipos = ['Actividades deportivas', 'Administración y gestión', 'Agraria', 'Artes gráficas', 'Artes y artesanías', 'Comercio y marketing', 'Edificación y obra civil', 'Electricidad y electrónica', 'Energía y agua', 'Fabricación mecánica', 'Hostelería y turismo', 'Imagen personal', 'Imagen y sonido', 'Industrias alimentarias', 'Industrias extractivas', 'Informática y comunicaciones', 'Instalación y mantenimiento', 'Madera, mueble y corcho', 'Marítimo pesquera', 'Química', 'Sanidad', 'Seguridad y medio ambiente', 'Servicios socioculturales y a la comunidad', 'Textil, confección y piel', 'Transporte', 'Mantenimiento de vehículos', 'Vidrio y cerámica']
+        for name in tipos:
+            sector = Sector(Nsector=name)
+            db.session.add(sector)
+            db.session.commit()
+
+        print("All test Sector created")
+
+    """ 
+    This is an example command "insert_puesto_trabajo" that you can run from the command line
+    by typing: $ flask insert_puesto_trabajo
+    """
+    @app.cli.command("insert_puesto_trabajo") # name of our command
+    def insert_puesto_trabajo():
+        print("Creating test PuestoTrabajo")
+        tipos = ['Diseñador web', 'Desarrollador .NET', 'Desarrollador Android', 'Desarrollador Backend', 'Desarrollador Blockchain',  'Desarrollador APP', 'Desarrollador Front End', 'Desarrollador Full Stack', 'Desarrollador Low Code', 'Desarrollador NodeJS', 'Programador C++', 'Programador C#', 'Programador Cobol', 'Programador Delphi', 'Programador Bases de Datos', 'Programador Java', 'Programador PHP', 'Programador Python', 'Programador Rust', 'Programador SQL', 'Programador Unity']
+        for name in tipos:
+            puesto_trabajo = PuestoTrabajo(NTrabajo=name)
+            db.session.add(puesto_trabajo)
+            db.session.commit()
+
+        print("All test PuestoTrabajo created")
+
+        ### Insert the code to populate others tables if needed
+

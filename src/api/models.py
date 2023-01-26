@@ -140,7 +140,6 @@ class Empresa(db.Model):
     indentificacion_fiscal = db.Column(db.String(120), unique=False, nullable=False)
     descripcion = db.Column(db.String(120), unique=False, nullable=False)
     usuario_id = db.Column(db.Integer, db.ForeignKey('Usuario.id'), unique=False, nullable=False)
-    # Es_empresa = db.Column(db.Integer, db.ForeignKey('Usuario.id'), unique=False, nullable=False)
     usuarios = db.relationship(Usuario)
 
     def serialize(self):

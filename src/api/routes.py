@@ -140,9 +140,9 @@ def login():
         identity={"rol": rol, "data": user.serialize()})
     return jsonify({"msg": None, "data": { "userId": user.id, "token": token, "rol": rol }})
 
-@api.route('/usuario/<int:id>/', methods=['DELETE'])
-def usuario(id):
-   return jsonify({"msg":"Perfil eliminado", "data": None}), 201
+# @api.route('/usuario/<int:id>/', methods=['DELETE'])
+# def usuario(id):
+#    return jsonify({"msg":"Perfil eliminado", "data": None}), 201
 
 @api.route('/provincias', methods=['GET'])
 def get_provincias():
@@ -180,16 +180,12 @@ def editar_empresa(id):
     data = get_jwt_identity()
     body = request.get_json()
     nombreEmpresa = body.get('nombreEmpresa')
-    NumeroTrabajadores = body.get('NumeroTrabajadores')
     ubicacion = body.get('ubicacion')
     tipo_emp = body.get('tipo_emp')
     telefono = body.get('telefono')
     sector = body.get('sector')
     indentificacion_fiscal = body.get('indentificacion_fiscal')
     descripcion = body.get('descripcion')
-
-
-
 
 
 @api.route('/candidato/<int:id>/', methods=['GET'])
@@ -206,7 +202,7 @@ def obtener_candidato(id):
         return jsonify({"msg":"Candidato no encontrado", "data": None}), 404
     candidato = candidatos[0]
 
-    return jsonify({"msg":"Candidato no encontrado", "data": candidato}), 200
+    return jsonify({"msg":"Candidato no encontrado", "data": candidato}), 404
 
 # @api.route('/candidato/<int:id>/', methods=['PUT'])
 # @jwt_required()

@@ -9,6 +9,7 @@ export const CandidateMenu = () => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("rol");
+    localStorage.removeItem("userId");
     navigate("/");
   };
 
