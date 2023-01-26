@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { onPrivate } from "../../private";
+import { Context } from "../../store/appContext";
 import "./CanditProfile.css";
 import config from "../../config";
 
@@ -17,110 +18,133 @@ const formularioTemplate = {
   provincia: null,
 };
 
+const infoBase = {
+  candidato: null,
+  provincias: null,
+  tipoEmpleos: null,
+  puestoTrabajos: null,
+};
+
 export const FormularioCandit = () => {
-  const [disabled, setDisabled] = useState(true);
+  const { store, actions } = useContext(Context);
   const navigate = useNavigate();
-  const [formulario, setFormulario] = useState(formularioTemplate);
-  const [nombre, insertarNombre] = useState([]);
-  const [primerApellido, insertarApellido1] = useState([]);
-  const [segundoApellido, insertarApellido2] = useState([]);
-  const [puestoTrabajo, insertarPuestoTrabajo] = useState([]);
-  const [telefono, insertarTelefono] = useState([]);
-  const [experiencia, insertarExperiencia] = useState([]);
-  const [cv, insertarCv] = useState([]);
-  const [cartaPresentacion, insertarCartaPresen] = useState([]);
-  const [tipoEmpleo, insertarTipoEmpleo] = useState([]);
-  const [provincia, insertarProvincia] = useState([]);
 
-  // ------ORIGINAL------
-
-  // useEffect(async () => {
-  //   onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
-  //   const res = await fetch(`${config}/canditprofile/${params.uid}`);
-  //   fetch(`${config}/canditprofile/${params.uid}`, {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((resp) => {
-  //       return resp.json();
-  //     })
-  //     .then((respJSON) => {
-  //       console.log(respJSON);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [disabled]);
-
-  // ------CON RETURN------
-
-  // useEffect(() => {
-  //   return async () => {
-  //     onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
-  //     const res = await fetch(`${config}/canditprofile/${params.uid}`);
-  //     fetch(`${config}/canditprofile/${params.uid}`, {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     })
-  //       .then((resp) => {
-  //         return resp.json();
-  //       })
-  //       .then((respJSON) => {
-  //         console.log(respJSON);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   };
-  // }, [disabled]);
-
-  // ------FUNCION DENTRO + CREANDO CONSTANTE------
-
-  // useEffect(() => {
-  //   onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
-  //   const fetchCandit = async () => {
-  //     const initialCandit = await fetch(
-  //       `${config}/canditprofile/${params.uid}`
-  //     );
-  //     setCandit(initialCandit);
-  //     fetchCandit();
-  //     fetch(`${config}/canditprofile/${params.uid}`, {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //   };
-  // }, [disabled]);
-
-  // ------SACANDO FUNCION Y LLAMANDOLA------
+  const [disabled, setDisabled] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [informacion, setInformacion] = useState(infoBase);
 
   useEffect(() => {
+    const userId = store.userId;
+    if (!userId) {
+      navigate("/");
+      return;
+    }
     onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
-    fetchCandit();
+    fetchCandit(userId).then(() => setLoading(false));
   }, [disabled]);
 
-  const fetchCandit = async () => {
-    const res = await fetch(`${config}/canditprofile/${params.id}`);
-    fetch(`${config}/canditprofile/${params.uid}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => {
-        return resp.json();
-      })
-      .then((respJSON) => {
-        console.log(respJSON);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const fetchCandit = async (userId) => {
+    const candidatoResponse = fetch(
+      `${config.HOSTNAME}/api/candidato/${userId}`
+    );
+    const provinciasResponse = fetch(`${config.HOSTNAME}/api/provincias`);
+    const tiposEmpleosResponse = fetch(`${config.HOSTNAME}/api/tiposEmpleo`);
+    const puestoTrabajoResponse = fetch(
+      `${config.HOSTNAME}/api/puestosTrabajo`
+    );
+
+    // const candidatoInfo = await candidatoResponse.json();
+    // console.log({ candidatoInfo });
+
+    const promises = [
+      candidatoResponse,
+      provinciasResponse,
+      tiposEmpleosResponse,
+      puestoTrabajoResponse,
+    ];
+
+    const responseList = await Promise.all(promises);
+
+    const keys = Object.keys(infoBase);
+    const auxInfoBase = { ...infoBase };
+    for (let index = 0; index < responseList.length; index++) {
+      const response = responseList[index];
+      const data = await response.json();
+      auxInfoBase[keys[index]] = data.data;
+    }
+    console.log(auxInfoBase);
+    setInformacion(auxInfoBase);
+
+    // TODO: comprobar q' los values != null (GESTIONAR)
+    // if (
+    //   [
+    //     auxInfoBase.candidato,
+    //     auxInfoBase.provincia,
+    //     auxInfoBase.puestoTrabajos,
+    //     auxInfoBase.puestoTrabajos,
+    //   ].includes(null)
+    // ) {
+    //   // TODO: hacer algo
+    // }
+    setLoading(false);
+  };
+
+  if (loading) {
+    return <>Cargando</>; //TODO: echarle un ojo
+  }
+
+  const onSave = async () => {
+    console.log(">>> SALVANDO!!!!");
+
+    //TODO: validar data.
+    const nombre = document.getElementById("nombre").value;
+    const primerApellido = document.getElementById("primer-apellido").value;
+    const provincia = document.getElementById("provincia").value;
+
+    const data = {
+      nombre: nombre,
+      primer_apellido: primerApellido,
+      segundo_apellido: "",
+      puesto_trab: "",
+      telefono: "",
+      experiencia: "",
+      cv: "",
+      carta_presen: "",
+      tipo_emp: "",
+      provincia: Number(provincia),
+    };
+
+    // console.log({ data });
+    // return;
+    const tokenOBJ = localStorage.token;
+    const userId = store.userId;
+    const tokenData = JSON.parse(tokenOBJ);
+    const editarCanditatoResponse = await fetch(
+      `${config.HOSTNAME}/api/candidato/${userId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${tokenData.token}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    //TODO
+    // if (editarCanditatoResponse.status === 401) {
+    //  // ===> eliminar info del usuario del localStorage
+    //   alert("Token no valido");
+    //   navigate("/");
+    //   return;
+    // }
+
+    const nuevaCandidatoInfo = await editarCanditatoResponse.json();
+    //TODO: validar datos
+
+    const auxInformacion = JSON.parse(JSON.stringify(informacion));
+    auxInformacion.candidato = nuevaCandidatoInfo;
+    setInformacion(auxInformacion);
   };
 
   return (
@@ -169,6 +193,7 @@ export const FormularioCandit = () => {
                 className="form-control"
                 id="nombre"
                 required
+                defaultValue={informacion.candidato.nombre}
               />
             </div>
             <div className="mt-3">
@@ -179,6 +204,7 @@ export const FormularioCandit = () => {
                 type="text"
                 className="form-control"
                 id="primer-apellido"
+                value={informacion.candidato.primer_apellido}
               />
             </div>
             <div className="mt-3">
@@ -197,11 +223,19 @@ export const FormularioCandit = () => {
                 className="form-select mt-2"
                 aria-label="provincias"
                 required
+                id="provincia"
               >
                 <option defaultValue>Selecciona una provincia</option>
-                <option value="madrid">Madrid</option>
-                <option value="barcelona">Barcelona</option>
-                <option value="bilbao">Bilbao</option>
+
+                {informacion.provincias.map((p) => (
+                  <option
+                    selected={informacion.candidato.provincia_id == p.id}
+                    key={p.id}
+                    value={p.id}
+                  >
+                    {p.Nprovincia}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="mt-3">
@@ -263,7 +297,8 @@ export const FormularioCandit = () => {
                 type="email"
                 className="form-control"
                 id="email"
-                required
+                disabled
+                defaultValue={informacion.candidato.email}
               />
             </div>
             <div className="mt-3">
@@ -284,7 +319,11 @@ export const FormularioCandit = () => {
               id="carta-presentacion"
             ></textarea>
           </div>
-          <button type="submit" className="btn btn-primary mt-3 col-5">
+          <button
+            type="submit"
+            className="btn btn-primary mt-3 col-5"
+            onClick={onSave}
+          >
             GUARDAR
           </button>
         </div>

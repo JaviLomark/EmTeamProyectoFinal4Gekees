@@ -86,14 +86,16 @@ class Candidato(db.Model):
             "nombre": self.nombre,
             "primer_apellido": self.primer_apellido,
             "segundo_apellido": self.segundo_apellido,
-            "puesto_trab": self.puesto_trab,
+            "puesto_trab": self.puesto_trabajo,
             "telefono": self.telefono,
             "experiencia": self.experiencia,
             "cv": self.cv,
             "carta_presen": self.carta_presen,
             "tipo_emp": self.tipo_emp,
-            "provincia": self.provincia,
-            "usuario_id": self.usuario_id
+            "provincia_id": self.provincias.id,
+            "provincia": self.provincias.Nprovincia,
+            "usuario_id": self.usuario_id,
+            "email": self.usuarios.email
         }
 
 class CandidatoEmp(db.Model):
