@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { onPrivate } from "../../private";
 import { Context } from "../../store/appContext";
 import "./CanditProfile.css";
@@ -89,8 +89,18 @@ export const FormularioCandit = () => {
     setLoading(false);
   };
 
+  // if (loading) {
+  //   return <>Cargando</>; //TODO: echarle un ojo
+  // }
   if (loading) {
-    return <>Cargando</>; //TODO: echarle un ojo
+    return (
+      <div className="d-flex justify-content-center mt-5 mb-5 spinner">
+        <div
+          className="spinner-grow text-warning mt-5 mb-5 p-4"
+          role="status"
+        ></div>
+      </div>
+    );
   }
 
   const onSave = async () => {
@@ -99,18 +109,25 @@ export const FormularioCandit = () => {
     //TODO: validar data.
     const nombre = document.getElementById("nombre").value;
     const primerApellido = document.getElementById("primer-apellido").value;
+    const segundoApellido = document.getElementById("segundo-apellido").value;
+    const puestoTrab = document.getElementById("puestoTrabajo").value;
+    const telefono = document.getElementById("telefono").value;
+    const experiencia = document.getElementById("experiencia").value;
+    const cv = document.getElementById("cv").value;
+    const cartaPresen = document.getElementById("carta-presentacion").value;
+    const tipoEmp = document.getElementById("tipoTrabajo").value;
     const provincia = document.getElementById("provincia").value;
 
     const data = {
       nombre: nombre,
       primer_apellido: primerApellido,
-      segundo_apellido: "",
-      puesto_trab: "",
-      telefono: "",
-      experiencia: "",
-      cv: "",
-      carta_presen: "",
-      tipo_emp: "",
+      segundo_apellido: segundoApellido,
+      puesto_trab: Number(puestoTrab),
+      telefono: telefono,
+      experiencia: experiencia,
+      cv: cv,
+      carta_presen: cartaPresen,
+      tipo_emp: Number(tipoEmp),
       provincia: Number(provincia),
     };
 
@@ -204,7 +221,7 @@ export const FormularioCandit = () => {
                 type="text"
                 className="form-control"
                 id="primer-apellido"
-                value={informacion.candidato.primer_apellido}
+                defaultValue={informacion.candidato.primer_apellido}
               />
             </div>
             <div className="mt-3">
@@ -215,6 +232,7 @@ export const FormularioCandit = () => {
                 type="text"
                 className="form-control"
                 id="segundo-apellido"
+                defaultValue={informacion.candidato.segundo_apellido}
               />
             </div>
             <div className="mt-3">
@@ -238,19 +256,27 @@ export const FormularioCandit = () => {
                 ))}
               </select>
             </div>
-            <div className="mt-3">
+            {/* <div className="mt-3">
               Tipo de trabajo*
               <select
                 className="form-select mt-2"
                 aria-label="tipoTrabajo"
                 required
+                id="tipoTrabajo"
               >
                 <option defaultValue>Selecciona un tipo de trabajo</option>
-                <option value="remoto">Remoto</option>
-                <option value="presencial">Presencial</option>
-                <option value="hibrido">Hibrido</option>
+
+                {informacion.tipo_emp.map((pt) => (
+                  <option
+                    selected={informacion.candidato.empleos_id == pt.id}
+                    key={pt.id}
+                    value={pt.id}
+                  >
+                    {pt.Nempleo}
+                  </option>
+                ))}
               </select>
-            </div>
+            </div> */}
           </div>
           {/* Columna derecha */}
           <div className="col-md-4">
@@ -258,13 +284,21 @@ export const FormularioCandit = () => {
               Puesto de trabajo*
               <select
                 className="form-select mt-2"
-                aria-label="provincias"
+                aria-label="puestoTrabajo"
                 required
+                id="puestoTrabajo"
               >
                 <option defaultValue>Selecciona un puesto de trabajo</option>
-                <option value="Desarrollador">Desarrollador</option>
-                <option value="Junior">Junior</option>
-                <option value="Senior">Senior</option>
+
+                {informacion.puesto_trabajo.map((t) => (
+                  <option
+                    selected={informacion.candidato.puesto_trabajo_id == t.id}
+                    key={t.id}
+                    value={t.id}
+                  >
+                    {p.Ntrabajo}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="mt-3">
@@ -276,6 +310,7 @@ export const FormularioCandit = () => {
                 className="form-control"
                 id="telefono"
                 required
+                defaultValue={informacion.candidato.telefono}
               />
             </div>
             <div className="mt-3">
@@ -287,6 +322,7 @@ export const FormularioCandit = () => {
                 className="form-control"
                 id="experiencia"
                 required
+                defaultValue={informacion.candidato.experiencia}
               />
             </div>
             <div className="mt-3">
@@ -305,7 +341,7 @@ export const FormularioCandit = () => {
               <label htmlFor="cv" className="form-label">
                 C.V*
               </label>
-              <input type="file" className="form-control" id="cv" required />
+              <input type="file" className="form-control" id="cv" />
             </div>
           </div>
           <div className="form-floating col-md-8 mt-3">
@@ -315,8 +351,9 @@ export const FormularioCandit = () => {
               required
               className="form-control"
               type="text-area"
-              style={{ height: "10rem" }}
+              // style={{ height: "10rem" }}
               id="carta-presentacion"
+              defaultValue={informacion.candidato.carta_presen}
             ></textarea>
           </div>
           <button
