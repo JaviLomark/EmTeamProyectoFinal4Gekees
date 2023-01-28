@@ -73,19 +73,33 @@ def signup():
     db.session.add(user)
     db.session.commit()
 
+    provincia = Provincia.query.first()
+    if provincia is None:
+        return jsonify({"msg": "Provincias no cargadas", "data": None}), 400
+
+    tipo_empleo = Tipo_Empleo.query.first()
+    if tipo_empleo is None:
+        return jsonify({"msg": "tipo_empleo no cargadas", "data": None}), 400
+
+
+    puesto_trabajo = PuestoTrabajo.query.first()
+    if puesto_trabajo is None:
+        return jsonify({"msg": "puesto_trabajo no cargadas", "data": None}), 400
+
+
     if user.candidato: 
         candidato = Candidato(
-            avatar = '',
+            avatar = 'https://res.cloudinary.com/dzpvz1nag/image/upload/v1673638486/image_1_zapzbe.png',
             nombre = '',
             primer_apellido = '',
             segundo_apellido = '',
-            puesto_trabajo = 1, # ojo
+            puesto_trabajo = puesto_trabajo.id, # ojo
             telefono = 0,
             experiencia = '',
             cv = '',
             carta_presen = '',
-            tipo_emp = 1, #ojo
-            provincia = 1, # provincia_id
+            tipo_emp = tipo_empleo.id, #ojo
+            provincia = provincia.id, 
             usuario_id = user.id,
             es_visible = True, # OJO
         )
@@ -167,6 +181,12 @@ def get_tiposEmpleo():
     data = [empleo.serialize() for empleo in empleos]
     return jsonify({"msg": "", "data": data})
 
+# https://3001-4geeksacade-reactflaskh-oxcbm6rsuhk.ws-eu84.gitpod.io/api/provincias
+
+# https://3001-4geeksacade-reactflaskh-oxcbm6rsuhk.ws-eu84.gitpod.io/api/provincias
+
+# https://3001-4geeksacade-reactflaskh-oxcbm6rsuhk.ws-eu84.gitpod.io/api/provincias
+
 @api.route('/puestosTrabajo', methods=['GET'])
 def get_puestosTrabajo():
     puestosTrabajo = PuestoTrabajo.query.all()
@@ -175,31 +195,47 @@ def get_puestosTrabajo():
 
     # /<int:id>
 
-@api.route('/candidato/<int:id>/', methods=['PUT'])
+@api.route('/edit_candidato/<int:id>', methods=['PUT'])
+# @api.route('/prueba', methods=['GET'])
 # @jwt_required()
 def editar_candidato(id):
     # data = get_jwt_identity()
+    ## ---
+    print(">>> 01 HOLA")
+    # return jsonify({"msg": ">>>>", "data": "candidato.serialize()"})
+    avatar_file = request.files.get('avatar')
+    print('avatar_file: ', avatar_file)
+    url_avatar = ''
+    if avatar_file:
+        data = cloudinary.uploader.upload(avatar_file)
+        url_avatar = data["secure_url"]
+
+
     user = Usuario.query.filter_by(id=id).first()
     if user is None:
         return jsonify({"msg":"User no encontrado", "data": None}), 404
 
+    print(user)
     candidato = Candidato.query.filter_by(usuario_id=user.id).first()
     if candidato is None:
         return jsonify({"msg":"Candidato no encontrado", "data": None}), 404
 
-    
-    body = request.get_json()
-
-    nombre = body.get('nombre')
-    primer_apellido = body.get('primer_apellido')
-    primer_segundo_apellido = body.get('segundo_apellido')
-    telefono = body.get('telefono')
-    experiencia = body.get('experiencia')
-    carta_presen = body.get('carta_presen')
+    print(candidato)
+    nombre = request.form.get('nombre')
+    primer_apellido = request.form.get('primer_apellido')
+    segundo_apellido = request.form.get('segundo_apellido')
+    puesto_trabajo = request.form.get('puesto_trabajo')
+    telefono = request.form.get('telefono')
+    experiencia = request.form.get('experiencia')
+    carta_presen = request.form.get('carta_presen')
+    tipo_emp = request.form.get('tipo_emp')
+    provincia = request.form.get('provincia')
     # visible = body.get('visible')
 
-
     # candidato.avatar = avatar if avatar != None and avatar != "" else  candidato.avatar
+    print('>>>>>>>ANTES')
+    candidato.avatar = url_avatar if url_avatar != None and url_avatar != "" else  candidato.avatar
+    print('>>>>>>>DESPUES')
     candidato.nombre = nombre if nombre != None and nombre != "" else  candidato.nombre
     candidato.primer_apellido = primer_apellido if primer_apellido != None and primer_apellido != "" else  candidato.primer_apellido
     candidato.segundo_apellido = segundo_apellido if segundo_apellido != None and segundo_apellido != "" else  candidato.segundo_apellido
@@ -210,25 +246,18 @@ def editar_candidato(id):
     candidato.carta_presen = carta_presen if carta_presen != None and carta_presen != "" else  candidato.carta_presen
     candidato.tipo_emp = tipo_emp if tipo_emp != None and tipo_emp != "" else  candidato.tipo_emp
     candidato.provincia = provincia if provincia != None and provincia != "" else  candidato.provincia
+    print('>>>>>>>HOLA')
 
-    # candidato.avatar = body.get('avatar')
-    # candidato.nombre = nombre if nombre != None and nombre != "" else  candidato.nombre
-    # candidato.primer_apellido = primer_apellido if primer_apellido != None and primer_apellido != "" else  candidato.primer_apellido
-    # candidato.segundo_apellido = body.get('segundo_apellido')
-    # candidato.puesto_trabajo = body.get('puesto_trab')
-    # candidato.telefono = body.get('telefono')
-    # candidato.experiencia = body.get('experiencia')
-    # candidato.cv = body.get('cv')
-    # candidato.carta_presen = body.get('carta_presen')
-    # candidato.tipo_emp = body.get('tipo_emp')
-
-    # if visible:
-    #   user.visible = visible
-
-    # GUARDO
-    db.session.commit()
     
-    return jsonify({"msg": "", "data": candidato.serialize()})
+
+    # # if visible:
+    # #   user.visible = visible
+
+    # # GUARDO
+    db.session.commit()
+    return jsonify({"msg": ">>>>", "data": candidato.serialize()})
+    
+    # return jsonify({"msg": "", "data": candidato.serialize()})
 
 def uploadAvatar():
     avatar = request.files.get['avatar']
@@ -278,6 +307,15 @@ def obtener_candidato(id):
         return jsonify({"msg":"Candidato no encontrado", "data": None}), 404
 
     return jsonify({"msg":"", "data": candidato.serialize()}), 200
+
+
+@api.route('/lista_candidatos', methods=['GET'])
+# @jwt_required()
+def obtener_candidatos():
+    candidatos = Candidato.query.all()
+    data = [candidato.serialize() for candidato in candidatos]
+    return jsonify({"msg": "", "data": data}), 200
+
 
 
 

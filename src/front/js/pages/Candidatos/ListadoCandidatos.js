@@ -1,14 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { onPrivate } from "../../private";
+import config from "../../config";
 
 export const ListadoCandidatos = () => {
-  const [disabled, setDisabled] = useState(true);
   const navigate = useNavigate();
+  const [loading, setloading] = useState(true);
+  const [disabled, setDisabled] = useState(true);
+  const [candidatos, setCandidatos] = useState([]);
 
   useEffect(() => {
-    onPrivate(setDisabled, navigate, { namePage: "listado-candidatos" });
+    // onPrivate(setDisabled, navigate, { namePage: "listado_candidatos" });
+    obtenerListaCandidatos();
   }, [disabled]);
+
+  const obtenerListaCandidatos = async () => {
+    const candidatosRes = await fetch(
+      `${config.HOSTNAME}/api/lista_candidatos`
+    );
+    // TODO: validar candidatosRes.status(codigo) != 200 alert
+
+    const data = await candidatosRes.json();
+    console.log({ data });
+    setCandidatos(data.data);
+    setloading(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center mt-5 mb-5 spinner">
+        <div
+          className="spinner-grow text-warning mt-5 mb-5 p-4"
+          role="status"
+        ></div>
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid p-0">
@@ -35,23 +62,32 @@ export const ListadoCandidatos = () => {
           </select>
         </div>
       </div>
-      <div className="row justify-content-center m-3">
-        <div className="card col-10 col-md-8 mt-3">
-          <div className="card-body">
-            <h4 className="card-title">Desarrollador web</h4>
-            <i className="fas fa-map-marker-alt"></i>
-            <span> Madrid</span>
-            <i className="fas fa-street-view ms-4"></i>
-            <span> Remoto</span>
-            <a
-              href="#"
-              className="btn btn-primary position-absolute top-0 end-0 m-4"
-            >
-              Ver Candidato
-            </a>
+      {/* ---- */}
+      {candidatos.map((candidato) => (
+        <>
+          <div key={candidato.id} className="row justify-content-center m-3">
+            <div className="card col-10 col-md-8 mt-3">
+              <div className="card-body">
+                <img src={candidato.avatar} style={{ width: "50px" }}></img>
+
+                <h4 className="card-title">{candidato.puesto_trab}</h4>
+                <i className="fas fa-map-marker-alt"></i>
+                <span> {candidato.provincia}</span>
+                <i className="fas fa-street-view ms-4"></i>
+                <span> {candidato.tipo_emp}</span>
+                <a
+                  href="#"
+                  className="btn btn-primary position-absolute top-0 end-0 m-4"
+                  onClick={() => navigate(`/candidato/${candidato.usuario_id}`)}
+                >
+                  Ver Candidato
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ))}
+      {/* ---- */}
     </div>
   );
 };

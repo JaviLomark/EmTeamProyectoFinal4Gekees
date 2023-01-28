@@ -92,16 +92,6 @@ export const FormularioCandit = () => {
   // if (loading) {
   //   return <>Cargando</>; //TODO: echarle un ojo
   // }
-  if (loading) {
-    return (
-      <div className="d-flex justify-content-center mt-5 mb-5 spinner">
-        <div
-          className="spinner-grow text-warning mt-5 mb-5 p-4"
-          role="status"
-        ></div>
-      </div>
-    );
-  }
 
   const onSave = async () => {
     console.log(">>> SALVANDO!!!!");
@@ -118,18 +108,21 @@ export const FormularioCandit = () => {
     const tipoEmpleo = document.getElementById("tipoEmpleo").value;
     const provincia = document.getElementById("provincia").value;
 
-    const data = {
-      nombre: nombre,
-      primer_apellido: primerApellido,
-      segundo_apellido: segundoApellido,
-      puesto_trab: Number(puestoTrab),
-      telefono: telefono,
-      experiencia: experiencia,
-      cv: cv,
-      carta_presen: cartaPresen,
-      tipo_emp: Number(tipoEmpleo),
-      provincia: Number(provincia),
-    };
+    const avatar = document.getElementById("subirAvatar").files[0];
+    console.log({ avatar });
+
+    const body = new FormData();
+    body.append("avatar", avatar);
+    body.append("nombre", nombre);
+    body.append("primer_apellido", primerApellido);
+    body.append("segundo_apellido", segundoApellido);
+    body.append("puesto_trab", Number(puestoTrab));
+    body.append("telefono", telefono);
+    body.append("experiencia", experiencia);
+    // body.append("cv", cv);
+    body.append("carta_presen", cartaPresen);
+    body.append("tipo_emp", Number(tipoEmpleo));
+    body.append("provincia", Number(provincia));
 
     // console.log({ data });
     // return;
@@ -137,16 +130,19 @@ export const FormularioCandit = () => {
     const userId = store.userId;
     const tokenData = JSON.parse(tokenOBJ);
     const editarCanditatoResponse = await fetch(
-      `${config.HOSTNAME}/api/candidato/${userId}`,
+      `${config.HOSTNAME}/api/edit_candidato/${userId}`,
       {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${tokenData.token}`,
-        },
-        body: JSON.stringify(data),
+        // headers: {
+        //   // "Content-Type": "application/x-www-form-urlencoded",
+        //   Authorization: `Bearer ${tokenData.token}`,
+        // },
+        // body: JSON.stringify(data),
+        body: body,
       }
     );
+
+    window.location.reload();
 
     //TODO
     // if (editarCanditatoResponse.status === 401) {
@@ -156,38 +152,44 @@ export const FormularioCandit = () => {
     //   return;
     // }
 
-    const nuevaCandidatoInfo = await editarCanditatoResponse.json();
-    //TODO: validar datos
+    // const nuevaCandidatoInfo = await editarCanditatoResponse.json();
+    // //TODO: validar datos
 
-    const auxInformacion = JSON.parse(JSON.stringify(informacion));
-    auxInformacion.candidato = nuevaCandidatoInfo;
-    setInformacion(auxInformacion);
-  
+    // const auxInformacion = JSON.parse(JSON.stringify(informacion));
+    // auxInformacion.candidato = nuevaCandidatoInfo;
+    // setInformacion(auxInformacion);
   };
 
-  const subirAvatar = () => {
-    const avatar = document.getElementById('avatar').files[0];
-    const body = new FormData()
-    body.append('avatar', avatar)
+  // const subirAvatar = () => {
+  //   const avatar = document.getElementById("avatar").files[0];
+  //   const body = new FormData();
+  //   body.append("avatar", avatar);
 
-    fetch(`${config.HOSTNAME}/api/candidato/${userId}`,{
-      method: 'POST',
-      body: body,
-    }).then(() =>{
-      return res.json();
-    }).then((data) => {
-      console.log({ data })
-    })
-  }
+  //   fetch(`${config.HOSTNAME}/api/candidato/${userId}`, {
+  //     method: "POST",
+  //     body: body,
+  //   })
+  //     .then(() => {
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       console.log({ data });
+  //     });
+  // };
 
   const loadAvatar = () => {
-    const subirAvatar = document.getElementById('subirAvatar').files[0];
+    const subirAvatar = document.getElementById("subirAvatar").files[0];
     const blob = new Blob([subirAvatar], { type: subirAvatar.type });
     const urlAvatar = URL.createObjectURL(blob);
     console.log({ urlAvatar });
-    const imageElement = document.getElementById('avatar');
+    const imageElement = document.getElementById("avatar");
     imageElement.src = urlAvatar;
-  }
+  };
+
+  const openFileWindow = () => {
+    const inputFile = document.getElementById("subirAvatar");
+    inputFile.click();
+  };
 
   // const subirCV = () => {
   //   const cv = document.getElementById('cv').files[0];
@@ -204,6 +206,16 @@ export const FormularioCandit = () => {
   //   })
   // }
 
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center mt-5 mb-5 spinner">
+        <div
+          className="spinner-grow text-warning mt-5 mb-5 p-4"
+          role="status"
+        ></div>
+      </div>
+    );
+  }
   return (
     <div className="container-fluid p-0">
       <h1 className="d-flex justify-content-center p-3 mb-2 bg-warning">
@@ -211,16 +223,25 @@ export const FormularioCandit = () => {
       </h1>
       <form>
         <div className="d-flex justify-content-center">
-          <input id="subirAvatar" type='file' onChange={loadAvatar}></input>
+          <input
+            id="subirAvatar"
+            type="file"
+            onChange={loadAvatar}
+            hidden
+          ></input>
           <img
             id="avatar"
-            src="https://res.cloudinary.com/dzpvz1nag/image/upload/v1673638486/image_1_zapzbe.png"
+            src={informacion.candidato.avatar}
             className="img-fluid"
             style={{ width: "16rem" }}
           />
         </div>
         <div className="d-flex justify-content-center">
-          <button onClick={subirAvatar} type="submit" className="btn btn-primary m-1 p-1">
+          <button
+            type="button"
+            className="btn btn-primary m-1 p-1"
+            onClick={openFileWindow}
+          >
             Cambiar foto
           </button>
         </div>
@@ -399,7 +420,7 @@ export const FormularioCandit = () => {
             ></textarea>
           </div>
           <button
-            type="submit"
+            type="button"
             className="btn btn-primary mt-3 col-5"
             onClick={onSave}
           >

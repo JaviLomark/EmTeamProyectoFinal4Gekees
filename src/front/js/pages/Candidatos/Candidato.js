@@ -1,14 +1,48 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { onPrivate } from "../../private";
+import config from "../../config";
+import { Context } from "../../store/appContext";
 
 export const Candidato = () => {
-  const [disabled, setDisabled] = useState(true);
+  const { store, actions } = useContext(Context);
   const navigate = useNavigate();
+  const [disabled, setDisabled] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [candidato, setCandidato] = useState({});
+  const { theid } = useParams();
 
   useEffect(() => {
-    onPrivate(setDisabled, navigate, { namePage: "candidato" });
+    // onPrivate(setDisabled, navigate, { namePage: "candidato" });
+    // const userId = store.userId;
+    fetchCandit();
   }, [disabled]);
+
+  const fetchCandit = async () => {
+    console.log(">>> LISTADO");
+
+    console.log({ theid });
+    const candidatoResponse = await fetch(
+      `${config.HOSTNAME}/api/candidato/${theid}`
+    );
+    // validar statusCode
+
+    const data = await candidatoResponse.json();
+    console.log({ data });
+    setCandidato(data.data);
+    setLoading(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center mt-5 mb-5 spinner">
+        <div
+          className="spinner-grow text-warning mt-5 mb-5 p-4"
+          role="status"
+        ></div>
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid p-0">
@@ -18,7 +52,7 @@ export const Candidato = () => {
       <form>
         <div id="avatar" className="d-flex justify-content-center">
           <img
-            src="https://res.cloudinary.com/dzpvz1nag/image/upload/v1673638486/image_1_zapzbe.png"
+            src={candidato.avatar}
             className="img-fluid"
             style={{ width: "16rem" }}
           />
@@ -92,29 +126,33 @@ export const Candidato = () => {
               <label htmlFor="nombre-apellidos" className="form-label">
                 Nombre y apellidos
               </label>
-              <output
+              <input
                 type="text"
                 style={{ height: "2rem" }}
                 className="form-control"
                 id="nombre-apellidos"
+                defaultValue={`${candidato.nombre} ${candidato.primer_apellido}`}
+                disabled
               />
             </div>
             <div className="mt-3">
               <label htmlFor="provincia" className="form-label">
                 Provincia
               </label>
-              <output
+              <input
                 type="text"
                 className="form-control"
                 id="provincia"
                 style={{ height: "2rem" }}
+                defaultValue={candidato.provincia}
+                disabled
               />
             </div>
             <div className="mt-3">
               <label htmlFor="puestotrabajo" className="form-label">
                 Puesto de trabajo
               </label>
-              <output
+              <input
                 type="text"
                 className="form-control"
                 id="puestotrabajo"
@@ -127,7 +165,7 @@ export const Candidato = () => {
               <label htmlFor="tipo-trabajo" className="form-label">
                 Tipo de trabajo
               </label>
-              <output
+              <input
                 type="text"
                 className="form-control"
                 id="tipo-trabajo"
@@ -138,7 +176,7 @@ export const Candidato = () => {
               <label htmlFor="telefono" className="form-label">
                 Télefono
               </label>
-              <output
+              <input
                 type="text"
                 className="form-control"
                 id="telefono"
@@ -149,7 +187,7 @@ export const Candidato = () => {
               <label htmlFor="experiencia" className="form-label">
                 Experiencia
               </label>
-              <output
+              <input
                 type="text"
                 className="form-control"
                 id="experiencia"
@@ -160,11 +198,11 @@ export const Candidato = () => {
           <div className="form-floating col-md-8 mt-3 text-center">
             <label htmlFor="carta-presentacion"></label>
             Carta de presentación
-            <output
+            <input
               className="form-control"
               style={{ height: "15rem" }}
               id="carta-presentacion"
-            ></output>
+            ></input>
           </div>
         </div>
       </form>
