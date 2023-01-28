@@ -115,7 +115,7 @@ export const FormularioCandit = () => {
     const experiencia = document.getElementById("experiencia").value;
     const cv = document.getElementById("cv").value;
     const cartaPresen = document.getElementById("carta-presentacion").value;
-    const tipoEmp = document.getElementById("tipoTrabajo").value;
+    const tipoEmpleo = document.getElementById("tipoEmpleo").value;
     const provincia = document.getElementById("provincia").value;
 
     const data = {
@@ -127,7 +127,7 @@ export const FormularioCandit = () => {
       experiencia: experiencia,
       cv: cv,
       carta_presen: cartaPresen,
-      tipo_emp: Number(tipoEmp),
+      tipo_emp: Number(tipoEmpleo),
       provincia: Number(provincia),
     };
 
@@ -298,19 +298,19 @@ export const FormularioCandit = () => {
                 ))}
               </select>
             </div>
-            {/* <div className="mt-3">
+            <div className="mt-3">
               Tipo de trabajo*
               <select
                 className="form-select mt-2"
-                aria-label="tipoTrabajo"
+                aria-label="tipoEmpleo"
                 required
-                id="tipoTrabajo"
+                id="tipoEmpleo"
               >
                 <option defaultValue>Selecciona un tipo de trabajo</option>
 
-                {informacion.tipo_emp.map((pt) => (
+                {informacion.tipoEmpleos.map((pt) => (
                   <option
-                    selected={informacion.candidato.empleos_id == pt.id}
+                    selected={informacion.candidato.tipo_emp_id == pt.id}
                     key={pt.id}
                     value={pt.id}
                   >
@@ -318,7 +318,7 @@ export const FormularioCandit = () => {
                   </option>
                 ))}
               </select>
-            </div> */}
+            </div>
           </div>
           {/* Columna derecha */}
           <div className="col-md-4">
@@ -332,13 +332,13 @@ export const FormularioCandit = () => {
               >
                 <option defaultValue>Selecciona un puesto de trabajo</option>
 
-                {informacion.puesto_trabajo.map((t) => (
+                {informacion.puestoTrabajos.map((t) => (
                   <option
-                    selected={informacion.candidato.puesto_trabajo_id == t.id}
+                    selected={informacion.candidato.puestos_id == t.id}
                     key={t.id}
                     value={t.id}
                   >
-                    {p.Ntrabajo}
+                    {t.Ntrabajo}
                   </option>
                 ))}
               </select>

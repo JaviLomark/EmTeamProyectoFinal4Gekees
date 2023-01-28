@@ -197,18 +197,30 @@ def editar_candidato(id):
     experiencia = body.get('experiencia')
     carta_presen = body.get('carta_presen')
     # visible = body.get('visible')
-    
+
+
     # candidato.avatar = avatar if avatar != None and avatar != "" else  candidato.avatar
+    candidato.nombre = nombre if nombre != None and nombre != "" else  candidato.nombre
+    candidato.primer_apellido = primer_apellido if primer_apellido != None and primer_apellido != "" else  candidato.primer_apellido
+    candidato.segundo_apellido = segundo_apellido if segundo_apellido != None and segundo_apellido != "" else  candidato.segundo_apellido
+    candidato.puesto_trabajo = puesto_trabajo if puesto_trabajo != None and puesto_trabajo != "" else  candidato.puesto_trabajo
+    candidato.telefono = telefono if telefono != None and telefono != "" else  candidato.telefono
+    candidato.experiencia = experiencia if experiencia != None and experiencia != "" else  candidato.experiencia
+    # candidato.cv = cv if cv != None and cv != "" else  candidato.cv
+    candidato.carta_presen = carta_presen if carta_presen != None and carta_presen != "" else  candidato.carta_presen
+    candidato.tipo_emp = tipo_emp if tipo_emp != None and tipo_emp != "" else  candidato.tipo_emp
+    candidato.provincia = provincia if provincia != None and provincia != "" else  candidato.provincia
+
+    # candidato.avatar = body.get('avatar')
     # candidato.nombre = nombre if nombre != None and nombre != "" else  candidato.nombre
     # candidato.primer_apellido = primer_apellido if primer_apellido != None and primer_apellido != "" else  candidato.primer_apellido
-    # candidato.segundo_apellido = segundo_apellido if segundo_apellido != None and segundo_apellido != "" else  candidato.segundo_apellido
-    # candidato.puesto_trabajo = puesto_trabajo if puesto_trabajo != None and puesto_trabajo != "" else  candidato.puesto_trabajo
-    # candidato.telefono = telefono if telefono != None and telefono != "" else  candidato.telefono
-    # candidato.experiencia = experiencia if experiencia != None and experiencia != "" else  candidato.experiencia
-    # # candidato.cv = cv if cv != None and cv != "" else  candidato.cv
-    # candidato.carta_presen = carta_presen if carta_presen != None and carta_presen != "" else  candidato.carta_presen
-    # candidato.tipo_emp = tipo_emp if tipo_emp != None and tipo_emp != "" else  candidato.tipo_emp
-    # candidato.provincia = provincia if provincia != None and provincia != "" else  candidato.provincia
+    # candidato.segundo_apellido = body.get('segundo_apellido')
+    # candidato.puesto_trabajo = body.get('puesto_trab')
+    # candidato.telefono = body.get('telefono')
+    # candidato.experiencia = body.get('experiencia')
+    # candidato.cv = body.get('cv')
+    # candidato.carta_presen = body.get('carta_presen')
+    # candidato.tipo_emp = body.get('tipo_emp')
 
     # if visible:
     #   user.visible = visible
