@@ -162,7 +162,47 @@ export const FormularioCandit = () => {
     const auxInformacion = JSON.parse(JSON.stringify(informacion));
     auxInformacion.candidato = nuevaCandidatoInfo;
     setInformacion(auxInformacion);
+  
   };
+
+  const subirAvatar = () => {
+    const avatar = document.getElementById('avatar').files[0];
+    const body = new FormData()
+    body.append('avatar', avatar)
+
+    fetch(`${config.HOSTNAME}/api/candidato/${userId}`,{
+      method: 'POST',
+      body: body,
+    }).then(() =>{
+      return res.json();
+    }).then((data) => {
+      console.log({ data })
+    })
+  }
+
+  const loadAvatar = () => {
+    const subirAvatar = document.getElementById('subirAvatar').files[0];
+    const blob = new Blob([subirAvatar], { type: subirAvatar.type });
+    const urlAvatar = URL.createObjectURL(blob);
+    console.log({ urlAvatar });
+    const imageElement = document.getElementById('avatar');
+    imageElement.src = urlAvatar;
+  }
+
+  // const subirCV = () => {
+  //   const cv = document.getElementById('cv').files[0];
+  //   const body = new FormData()
+  //   body.append('cv', cv)
+
+  //   fetch(`${config.HOSTNAME}/api/candidato/${userId}`,{
+  //     method: 'PUT',
+  //     body: body,
+  //   }).then(() =>{
+  //     return res.json();
+  //   }).then((data) => {
+  //     console.log({ data })
+  //   })
+  // }
 
   return (
     <div className="container-fluid p-0">
@@ -170,15 +210,17 @@ export const FormularioCandit = () => {
         Mi perfil
       </h1>
       <form>
-        <div id="avatar" className="d-flex justify-content-center">
+        <div className="d-flex justify-content-center">
+          <input id="subirAvatar" type='file' onChange={loadAvatar}></input>
           <img
+            id="avatar"
             src="https://res.cloudinary.com/dzpvz1nag/image/upload/v1673638486/image_1_zapzbe.png"
             className="img-fluid"
             style={{ width: "16rem" }}
           />
         </div>
         <div className="d-flex justify-content-center">
-          <button type="submit" className="btn btn-primary m-1 p-1">
+          <button onClick={subirAvatar} type="submit" className="btn btn-primary m-1 p-1">
             Cambiar foto
           </button>
         </div>

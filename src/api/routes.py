@@ -10,6 +10,17 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+  cloud_name = "dzpvz1nag",
+  api_key = "596557131587953",
+  api_secret = "2KrkTL_OSXyE6llrx1UKopLFOHs",
+  secure = True
+)
+
 api = Blueprint('api', __name__)
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -162,6 +173,8 @@ def get_puestosTrabajo():
     data = [puestoTrabajo.serialize() for puestoTrabajo in puestosTrabajo]
     return jsonify({"msg": "", "data": data})
 
+    # /<int:id>
+
 @api.route('/candidato/<int:id>/', methods=['PUT'])
 # @jwt_required()
 def editar_candidato(id):
@@ -184,9 +197,8 @@ def editar_candidato(id):
     experiencia = body.get('experiencia')
     carta_presen = body.get('carta_presen')
     # visible = body.get('visible')
-
-
-    # candidato.avatar = nombre if nombre != None and nombre != "" else  candidato.nombre
+    
+    # candidato.avatar = avatar if avatar != None and avatar != "" else  candidato.avatar
     # candidato.nombre = nombre if nombre != None and nombre != "" else  candidato.nombre
     # candidato.primer_apellido = primer_apellido if primer_apellido != None and primer_apellido != "" else  candidato.primer_apellido
     # candidato.segundo_apellido = segundo_apellido if segundo_apellido != None and segundo_apellido != "" else  candidato.segundo_apellido
@@ -201,24 +213,45 @@ def editar_candidato(id):
     # if visible:
     #   user.visible = visible
 
-    
     # GUARDO
     db.session.commit()
     
     return jsonify({"msg": "", "data": candidato.serialize()})
+
+def uploadAvatar():
+    avatar = request.files.get['avatar']
+    if avatar:
+        data = cloudinary.uploader.upload(avatar)
+        url_avatar = data["secure-url"]
+        return jsonify(data), 201
+    return jsonify({"msg":"Error al subir tu imagen"})
+
+    print(avatar)
 
 @api.route('/empresa/<int:id>/', methods=['POST'])
 @jwt_required()
 def editar_empresa(id):
     data = get_jwt_identity()
     body = request.get_json()
-    nombreEmpresa = body.get('nombreEmpresa')
-    ubicacion = body.get('ubicacion')
-    tipo_emp = body.get('tipo_emp')
+
+    nombreEmpresa = body.get('nombre_emp')
+    ubicacion = body.get('ubicacion') #UBICACION Y PROVINCIA SON LO MISMO
+    tipo_trab = body.get('tipo_trab') #TIPO DE TRABAJO Y TIPO DE EMPLEO SON LO MISMO
     telefono = body.get('telefono')
     sector = body.get('sector')
     indentificacion_fiscal = body.get('indentificacion_fiscal')
     descripcion = body.get('descripcion')
+
+    # empresa.avatar = avatar if avatar != None and avatar != "" else  empresa.avatar
+    # empresa.nombreEmpresa = nombreEmpresa if nombreEmpresa != None and nombreEmpresa != "" else  empresa.nombreEmpresa
+    # empresa.tipo_trab = tipo_trab if tipo_trab != None and tipo_trab != "" else  empresa.tipo_trab
+    # empresa.ubicacion = ubicacion if ubicacion != None and ubicacion != "" else  empresa.ubicacion
+    # empresa.sector = sector if sector != None and sector != "" else  empresa.sector
+    # empresa.telefono = telefono if telefono != None and telefono != "" else  empresa.telefono
+    # empresa.indentificacion_fiscal = indentificacion_fiscal if indentificacion_fiscal != None and indentificacion_fiscal != "" else  empresa.indentificacion_fiscal
+    db.session.commit()
+    
+    return jsonify({"msg": "", "data": Empresa.serialize()})
 
 
 @api.route('/candidato/<int:id>/', methods=['GET'])
@@ -233,6 +266,24 @@ def obtener_candidato(id):
         return jsonify({"msg":"Candidato no encontrado", "data": None}), 404
 
     return jsonify({"msg":"", "data": candidato.serialize()}), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # @api.route('/candidato/<int:id>/', methods=['PUT'])
 # @jwt_required()
