@@ -189,7 +189,6 @@ def get_puestosTrabajo():
     data = [puestoTrabajo.serialize() for puestoTrabajo in puestosTrabajo]
     return jsonify({"msg": "", "data": data})
 
-    # /<int:id>
 
 @api.route('/edit_candidato/<int:id>', methods=['PUT'])
 # @api.route('/prueba', methods=['GET'])
@@ -215,7 +214,7 @@ def editar_candidato(id):
     if candidato is None:
         return jsonify({"msg":"Candidato no encontrado", "data": None}), 404
 
-    print(candidato)
+    # print(candidato)
     nombre = request.form.get('nombre')
     primer_apellido = request.form.get('primer_apellido')
     segundo_apellido = request.form.get('segundo_apellido')
@@ -235,7 +234,7 @@ def editar_candidato(id):
     candidato.puesto_trabajo = puesto_trabajo if puesto_trabajo != None and puesto_trabajo != "" else  candidato.puesto_trabajo
     candidato.telefono = telefono if telefono != None and telefono != "" else  candidato.telefono
     candidato.experiencia = experiencia if experiencia != None and experiencia != "" else  candidato.experiencia
-    # candidato.cv = cv if cv != None and cv != "" else  candidato.cv
+    candidato.cv = url_cv if url_cv != None and url_cv != "" else  candidato.cv
     candidato.carta_presen = carta_presen if carta_presen != None and carta_presen != "" else  candidato.carta_presen
     candidato.tipo_emp = tipo_emp if tipo_emp != None and tipo_emp != "" else  candidato.tipo_emp
     candidato.provincia = provincia if provincia != None and provincia != "" else  candidato.provincia
@@ -261,31 +260,61 @@ def uploadAvatar():
 
     print(avatar)
 
-@api.route('/empresa/<int:id>/', methods=['POST'])
-@jwt_required()
+
+
+@api.route('/edit_empresa/<int:id>/', methods=['PUT'])
+# @jwt_required()
 def editar_empresa(id):
-    data = get_jwt_identity()
-    body = request.get_json()
+    # data = get_jwt_identity()
+    # --- CLOUDINARY
+    avatar_file = request.files.get('avatar')
+    print('avatar_file: ', avatar_file)
+    url_avatar = ''
+    if avatar_file:
+        data = cloudinary.uploader.upload(avatar_file)
+        url_avatar = data["secure_url"]
+    # ---
+    # --- Filtrado entre candidato y empresa
+    user = Usuario.query.filter_by(id=id).first()
+    if user is None:
+        return jsonify({"msg":"User no encontrado", "data": None}), 404
 
-    nombreEmpresa = body.get('nombre_emp')
-    ubicacion = body.get('ubicacion') #UBICACION Y PROVINCIA SON LO MISMO
-    tipo_trab = body.get('tipo_trab') #TIPO DE TRABAJO Y TIPO DE EMPLEO SON LO MISMO
-    telefono = body.get('telefono')
-    sector = body.get('sector')
-    indentificacion_fiscal = body.get('indentificacion_fiscal')
-    descripcion = body.get('descripcion')
+    print(user)
+    empresa = Empresa.query.filter_by(usuario_id=user.id).first()
+    if empresa is None:
+        return jsonify({"msg":"Empresa no encontrada", "data": None}), 404
+    # ---
+    # --- Recepcion de datos de empresa
+    nombre_emp = request.form.get('nombre_emp')
+    ubicacion = request.form.get('ubicacion') #UBICACION Y PROVINCIA SON LO MISMO
+    tipo_trab = request.form.get('tipo_trab') #TIPO DE TRABAJO Y TIPO DE EMPLEO SON LO MISMO
+    telefono = request.form.get('telefono')
+    numero_trab = request.form.get('numero_trab')
+    sede = request.form.get('sede')
+    sector = request.form.get('sector') #Sector en el que trabaja la empresa
+    indentificacion_fiscal = request.form.get('identificacion_fiscal')
+    descripcion = request.form.get('descripcion')
 
-    # empresa.avatar = avatar if avatar != None and avatar != "" else  empresa.avatar
-    # empresa.nombreEmpresa = nombreEmpresa if nombreEmpresa != None and nombreEmpresa != "" else  empresa.nombreEmpresa
-    # empresa.tipo_trab = tipo_trab if tipo_trab != None and tipo_trab != "" else  empresa.tipo_trab
-    # empresa.ubicacion = ubicacion if ubicacion != None and ubicacion != "" else  empresa.ubicacion
-    # empresa.sector = sector if sector != None and sector != "" else  empresa.sector
-    # empresa.telefono = telefono if telefono != None and telefono != "" else  empresa.telefono
-    # empresa.indentificacion_fiscal = indentificacion_fiscal if indentificacion_fiscal != None and indentificacion_fiscal != "" else  empresa.indentificacion_fiscal
+    empresa.avatar = url_avatar if url_avatar != None and url_avatar != "" else  empresa.avatar
+    empresa.nombre_emp = nombre_emp if nombre_emp != None and nombre_emp != "" else  empresa.nombre_emp
+    # empresa.tipo_emp = tipo_emp if tipo_emp != None and tipo_emp != "" else  empresa.tipo_emp
+    # empresa.provincia = provincia if provincia != None and provincia != "" else  empresa.provincia
+    empresa.sector = sector if sector != None and sector != "" else  empresa.sector
+    empresa.telefono = telefono if telefono != None and telefono != "" else  empresa.telefono
+    empresa.indentificacion_fiscal = indentificacion_fiscal if indentificacion_fiscal != None and indentificacion_fiscal != "" else  empresa.indentificacion_fiscal
+    # ----
     db.session.commit()
-    
-    return jsonify({"msg": "", "data": Empresa.serialize()})
+    return jsonify({"msg": ">>>>", "data": empresa.serialize()})
 
+def uploadAvatar():
+    avatar = request.files.get['avatar']
+    if avatar:
+        data = cloudinary.uploader.upload(avatar)
+        url_avatar = data["secure-url"]
+        return jsonify(data), 201
+    return jsonify({"msg":"Error al subir tu imagen"})
+
+    print(avatar)
 
 @api.route('/candidato/<int:id>/', methods=['GET'])
 # @jwt_required()
@@ -353,62 +382,16 @@ def eliminar_usuario(id):
 
 # @api.route('/candidato/<int:id>/', methods=['PUT'])
 # @jwt_required()
-# def actualizar_candidato(id):
-#    return jsonify({"msg":"Error al actualizar", "data": None}), 200
+def obtener_empresa(id):
+    user = Usuario.query.filter_by(id=id).first()
+    if user is None:
+        return jsonify({"msg":"User no encontrado", "data": None}), 404
 
-# @api.route('/candidatos', methods=['GET'])
-# @jwt_required()
-# def listar_candidatos():
-#     return jsonify({"msg":"No se encuentran ningun candidato", "data": None}), 200
+    emrpesa = Empresa.query.filter_by(usuario_id=user.id).first()
+    if emrpesa is None:
+        return jsonify({"msg":"Empresa no encontrada", "data": None}), 404
 
-# @api.route('/empresa/<int:id>/', methods=['GET'])
-# @jwt_required()
-# def editar_empresa(id):
-#    return jsonify({"msg":"Empresa no encontrada", "data": None}), 200
-
-# @api.route('/empresa/<int:id>/', methods=['PUT'])
-# @jwt_required()
-# def actualizar_empresa(id):
-#     return jsonify({"msg":"Error al actualizar", "data": None}), 200
-
-
-
-# @app.route('/candidatos', methods=['GET'])
-# def lista_candidatos():
-#     candidatos = Usuario.query.all()
-#     lista_candidatos = list(map(lambda obj : obj.serialize(),candidatos))
-#     response_body = {
-        
-#         "success": True,
-#         "results": lista_candidatos()
-#     }
-
-#     return jsonify(response_body.serialize()), 200
-
-# @app.route('/candidatos/<int:usuario_id>', methods=['GET'])
-# def show_usuario(usuario_id):
-#     usuario.Id = usuario.query.get(usuario_id)
-#     print(usuario.Id)
-#     return jsonify(usuarioId.serialize()), 200
-
-
-# @app.route('/candidatos', methods=['GET'])
-# def lista_candidatos():
-#     candidatos = Usuario.query.all()
-#     lista_candidatos = list(map(lambda obj : obj.serialize(),candidatos))
-#     response_body = {
-        
-#         "success": True,
-#         "results": lista_candidatos()
-#     }
-
-#     return jsonify(response_body.serialize()), 200
-
-# @app.route('/candidatos/<int:usuario_id>', methods=['GET'])
-# def show_usuario(usuario_id):
-#     usuario.Id = usuario.query.get(usuario_id)
-#     print(usuario.Id)
-#     return jsonify(usuarioId.serialize()), 200
+    return jsonify({"msg":"", "data": emrpesa.serialize()}), 200
 
 # @api.route('/private', methods=['GET'])
 # @jwt_required()

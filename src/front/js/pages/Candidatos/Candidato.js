@@ -58,7 +58,7 @@ export const Candidato = () => {
           />
         </div>
         <div className="d-flex justify-content-center mt-4">
-          <button type="submit" className="btn btn-primary m-2">
+          <button onClick={() => store.actions.addToLike(candidato)} type="submit" className="btn btn-primary m-2">
             <i className="fas fa-thumbs-up"></i> Me gusta
           </button>
           {/* Button trigger modal */}

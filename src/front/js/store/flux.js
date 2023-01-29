@@ -16,6 +16,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           initial: "white",
         },
       ],
+      like:[]
     },
     actions: {
       // Use getActions to call a function within a fuction
@@ -30,6 +31,13 @@ const getState = ({ getStore, getActions, setStore }) => {
       setUserId: (userId) => {
         setStore({ userId });
       },
+      addToLike: (item) => {
+				const newStore = {...getStore()}
+
+				newStore.like = [...newStore.like, item]
+
+				setStore(newStore);
+			}
     },
   };
 };

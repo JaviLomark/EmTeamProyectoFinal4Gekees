@@ -53,9 +53,6 @@ export const FormularioCandit = () => {
       `${config.HOSTNAME}/api/puestosTrabajo`
     );
 
-    // const candidatoInfo = await candidatoResponse.json();
-    // console.log({ candidatoInfo });
-
     const promises = [
       candidatoResponse,
       provinciasResponse,
@@ -75,23 +72,8 @@ export const FormularioCandit = () => {
     console.log(auxInfoBase);
     setInformacion(auxInfoBase);
 
-    // TODO: comprobar q' los values != null (GESTIONAR)
-    // if (
-    //   [
-    //     auxInfoBase.candidato,
-    //     auxInfoBase.provincia,
-    //     auxInfoBase.puestoTrabajos,
-    //     auxInfoBase.puestoTrabajos,
-    //   ].includes(null)
-    // ) {
-    //   // TODO: hacer algo
-    // }
     setLoading(false);
   };
-
-  // if (loading) {
-  //   return <>Cargando</>; //TODO: echarle un ojo
-  // }
 
   const onSave = async () => {
     console.log(">>> SALVANDO!!!!");
@@ -119,13 +101,12 @@ export const FormularioCandit = () => {
     body.append("puesto_trab", Number(puestoTrab));
     body.append("telefono", telefono);
     body.append("experiencia", experiencia);
-    // body.append("cv", cv);
+    body.append("cv", cv);
     body.append("carta_presen", cartaPresen);
     body.append("tipo_emp", Number(tipoEmpleo));
     body.append("provincia", Number(provincia));
 
-    // console.log({ data });
-    // return;
+
     const tokenOBJ = localStorage.token;
     const userId = store.userId;
     const tokenData = JSON.parse(tokenOBJ);
@@ -160,23 +141,6 @@ export const FormularioCandit = () => {
     // setInformacion(auxInformacion);
   };
 
-  // const subirAvatar = () => {
-  //   const avatar = document.getElementById("avatar").files[0];
-  //   const body = new FormData();
-  //   body.append("avatar", avatar);
-
-  //   fetch(`${config.HOSTNAME}/api/candidato/${userId}`, {
-  //     method: "POST",
-  //     body: body,
-  //   })
-  //     .then(() => {
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       console.log({ data });
-  //     });
-  // };
-
   const loadAvatar = () => {
     const subirAvatar = document.getElementById("subirAvatar").files[0];
     const blob = new Blob([subirAvatar], { type: subirAvatar.type });
@@ -191,20 +155,6 @@ export const FormularioCandit = () => {
     inputFile.click();
   };
 
-  // const subirCV = () => {
-  //   const cv = document.getElementById('cv').files[0];
-  //   const body = new FormData()
-  //   body.append('cv', cv)
-
-  //   fetch(`${config.HOSTNAME}/api/candidato/${userId}`,{
-  //     method: 'PUT',
-  //     body: body,
-  //   }).then(() =>{
-  //     return res.json();
-  //   }).then((data) => {
-  //     console.log({ data })
-  //   })
-  // }
 
   if (loading) {
     return (
