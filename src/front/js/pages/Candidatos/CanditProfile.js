@@ -106,7 +106,6 @@ export const FormularioCandit = () => {
     body.append("tipo_emp", Number(tipoEmpleo));
     body.append("provincia", Number(provincia));
 
-
     const tokenOBJ = localStorage.token;
     const userId = store.userId;
     const tokenData = JSON.parse(tokenOBJ);
@@ -155,6 +154,22 @@ export const FormularioCandit = () => {
     inputFile.click();
   };
 
+  const setVisible = () => {
+    const esVisible = document.getElementById("habilitar-deshabilitar").checked;
+    console.log(">>> AQUIII: ", esVisible);
+
+    fetch(`${config.HOSTNAME}/api/edit_visible_candidato/${store.userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        es_visible: esVisible,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log({ data }));
+  };
 
   if (loading) {
     return (
@@ -201,7 +216,8 @@ export const FormularioCandit = () => {
             type="checkbox"
             role="switch"
             id="habilitar-deshabilitar"
-            defaultChecked
+            onChange={setVisible}
+            defaultChecked={informacion.candidato.es_visible}
           />
           <label
             className="form-check-label ms-1"

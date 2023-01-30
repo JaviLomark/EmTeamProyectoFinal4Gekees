@@ -97,7 +97,8 @@ class Candidato(db.Model):
             "provincia_id": self.provincias.id,
             "provincia": self.provincias.Nprovincia,
             "usuario_id": self.usuario_id,
-            "email": self.usuarios.email
+            "email": self.usuarios.email,
+            "es_visible": self.es_visible
         }
 
 class CandidatoEmp(db.Model):

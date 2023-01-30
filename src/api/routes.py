@@ -365,7 +365,26 @@ def eliminar_usuario(id):
     return jsonify({"msg":"Perfil eliminado", "data": None}), 200
 
 
+@api.route('/edit_visible_candidato/<int:id>', methods=['PUT'])
+# @api.route('/prueba', methods=['GET'])
+# @jwt_required()
+def edit_visible_candidato(id):
+    # data = get_jwt_identity()
+    ## ---
+    # return jsonify({"msg": ">>>>", "data": "candidato.serialize()"})
+    user = Usuario.query.filter_by(id=id).first()
+    if user is None:
+        return jsonify({"msg":"User no encontrado", "data": None}), 404
 
+    candidato = Candidato.query.filter_by(usuario_id=user.id).first()
+    if candidato is None:
+        return jsonify({"msg":"Candidato no encontrado", "data": None}), 404
+
+    body = request.get_json()
+    candidato.es_visible = body.get('es_visible')
+    db.session.commit()
+    return jsonify({"msg": ">>>>", "data": candidato.serialize()})
+    
 
 
 
