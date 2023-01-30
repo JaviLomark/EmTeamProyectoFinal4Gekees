@@ -165,10 +165,6 @@ def login():
         identity={"rol": rol, "data": user.serialize()})
     return jsonify({"msg": None, "data": { "userId": user.id, "token": token, "rol": rol }})
 
-# @api.route('/usuario/<int:id>/', methods=['DELETE'])
-# def usuario(id):
-#    return jsonify({"msg":"Perfil eliminado", "data": None}), 201
-
 @api.route('/provincias', methods=['GET'])
 def get_provincias():
     provincias = Provincia.query.all()
@@ -201,7 +197,6 @@ def get_puestosTrabajo():
 def editar_candidato(id):
     # data = get_jwt_identity()
     ## ---
-    print(">>> 01 HOLA")
     # return jsonify({"msg": ">>>>", "data": "candidato.serialize()"})
     avatar_file = request.files.get('avatar')
     print('avatar_file: ', avatar_file)
@@ -233,9 +228,7 @@ def editar_candidato(id):
     # visible = body.get('visible')
 
     # candidato.avatar = avatar if avatar != None and avatar != "" else  candidato.avatar
-    print('>>>>>>>ANTES')
     candidato.avatar = url_avatar if url_avatar != None and url_avatar != "" else  candidato.avatar
-    print('>>>>>>>DESPUES')
     candidato.nombre = nombre if nombre != None and nombre != "" else  candidato.nombre
     candidato.primer_apellido = primer_apellido if primer_apellido != None and primer_apellido != "" else  candidato.primer_apellido
     candidato.segundo_apellido = segundo_apellido if segundo_apellido != None and segundo_apellido != "" else  candidato.segundo_apellido
@@ -246,7 +239,6 @@ def editar_candidato(id):
     candidato.carta_presen = carta_presen if carta_presen != None and carta_presen != "" else  candidato.carta_presen
     candidato.tipo_emp = tipo_emp if tipo_emp != None and tipo_emp != "" else  candidato.tipo_emp
     candidato.provincia = provincia if provincia != None and provincia != "" else  candidato.provincia
-    print('>>>>>>>HOLA')
 
     
 
@@ -317,7 +309,31 @@ def obtener_candidatos():
     return jsonify({"msg": "", "data": data}), 200
 
 
+@api.route('/usuario/<int:id>', methods=['DELETE'])
+def eliminar_usuario(id):
+    user = Usuario.query.filter_by(id=id).first()
+    print(user)
 
+    if user is None:
+        return jsonify({"msg":"User no encontrado", "data": None}), 404
+
+    if user.candidato:
+        candidato = Candidato.query.filter_by(usuario_id=user.id).first()
+        if candidato is None:
+            return jsonify({"msg":"candidato no encontrado", "data": None}), 404
+        
+        db.session.delete(candidato)
+        # db.session.commit()
+    else:
+        empresa = Empresa.query.filter_by(usuario_id=user.id).first()
+        if empresa is None:
+            return jsonify({"msg":"empresa no encontrado", "data": None}), 404
+        
+        db.session.delete(empresa)
+
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({"msg":"Perfil eliminado", "data": None}), 200
 
 
 

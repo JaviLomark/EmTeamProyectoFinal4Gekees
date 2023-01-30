@@ -14,18 +14,27 @@ export const CandidateMenu = () => {
   };
 
   const eliminarPerfil = async () => {
-    const body = JSON.stringify(usuario.id);
-    const res = await fetch(`${config.HOSTNAME}/api/usuario/<int:id>/`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body,
-    });
-
-    const data = await res.json();
     const mensaje = confirm("¿Quieres eliminar tu perfil?");
+    console.log({ mensaje });
     if (mensaje) {
+      const res = await fetch(
+        `${config.HOSTNAME}/api/usuario/${store.userId}`,
+        {
+          method: "DELETE",
+          // headers: {
+          //   "Content-Type": "application/json",
+          // },
+        }
+      );
+      const data = await res.json();
+      if (res.status != 200) {
+        alert(data.msg);
+        return;
+      }
+
+      console.log({ data });
+      // TODO: Eliminar datos del usuario.
+      logout();
       alert("Perfil eliminado");
     } else {
       alert("Tu perfil NO se ha eliminado");

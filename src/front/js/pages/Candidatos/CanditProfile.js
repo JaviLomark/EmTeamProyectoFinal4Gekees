@@ -325,7 +325,7 @@ export const FormularioCandit = () => {
                 className="form-select mt-2"
                 aria-label="tipoEmpleo"
                 required
-                id="tipoEmpleo"
+                id="tipoEmpleos"
               >
                 <option defaultValue>Selecciona un tipo de trabajo</option>
 

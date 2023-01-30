@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { onPrivate } from "../../private";
 import config from "../../config";
+import "./listadoCandidatos.css";
 
 export const ListadoCandidatos = () => {
   const navigate = useNavigate();
@@ -67,21 +68,28 @@ export const ListadoCandidatos = () => {
         <>
           <div key={candidato.id} className="row justify-content-center m-3">
             <div className="card col-10 col-md-8 mt-3">
-              <div className="card-body">
-                <img src={candidato.avatar} style={{ width: "50px" }}></img>
-
-                <h4 className="card-title">{candidato.puesto_trab}</h4>
-                <i className="fas fa-map-marker-alt"></i>
-                <span> {candidato.provincia}</span>
-                <i className="fas fa-street-view ms-4"></i>
-                <span> {candidato.tipo_emp}</span>
-                <a
-                  href="#"
-                  className="btn btn-primary position-absolute top-0 end-0 m-4"
-                  onClick={() => navigate(`/candidato/${candidato.usuario_id}`)}
-                >
-                  Ver Candidato
-                </a>
+              <div className="row">
+                <div className="col-2">
+                  <img src={candidato.avatar} className="img-fluid"></img>
+                </div>
+                <div className="col-8">
+                  <div className="card-body">
+                    <h4 className="card-title">{candidato.puesto_trab}</h4>
+                    <i className="fas fa-map-marker-alt"></i>
+                    <span> {candidato.provincia}</span>
+                    <i className="fas fa-street-view ms-4"></i>
+                    <span> {candidato.tipo_emp}</span>
+                    <a
+                      href="#"
+                      className="btn btn-primary position-absolute top-0 end-0 m-4"
+                      onClick={() =>
+                        navigate(`/candidato/${candidato.usuario_id}`)
+                      }
+                    >
+                      Ver
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
