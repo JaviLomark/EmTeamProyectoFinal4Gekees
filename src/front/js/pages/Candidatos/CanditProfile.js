@@ -85,13 +85,19 @@ export const FormularioCandit = () => {
     const puestoTrab = document.getElementById("puestoTrabajo").value;
     const telefono = document.getElementById("telefono").value;
     const experiencia = document.getElementById("experiencia").value;
-    const cv = document.getElementById("cv").value;
     const cartaPresen = document.getElementById("carta-presentacion").value;
-    const tipoEmpleo = document.getElementById("tipoEmpleo").value;
+    const tipoEmpleo = document.getElementById("tipoEmpleos").value;
     const provincia = document.getElementById("provincia").value;
 
     const avatar = document.getElementById("subirAvatar").files[0];
     console.log({ avatar });
+    
+    const cv = document.getElementById("subircv").files[0];
+
+    const subirCV = document.getElementById("subirCV").files[0];
+    const blob = new Blob([subirCV], { type: subirCV.type });
+    const urlCV = URL.createObjectURL(blob);
+    console.log({ urlCV });
 
     const body = new FormData();
     body.append("avatar", avatar);

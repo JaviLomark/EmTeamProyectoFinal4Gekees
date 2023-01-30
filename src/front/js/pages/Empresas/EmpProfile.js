@@ -38,7 +38,7 @@ export const FormularioEmp = () => {
       navigate("/");
       return;
     }
-    onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
+    onPrivate(setDisabled, navigate, { namePage: "EmpPofile" });
     fetchEmp(userId).then(() => setLoading(false));
   }, [disabled]);
 
