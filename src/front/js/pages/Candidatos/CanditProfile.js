@@ -5,19 +5,6 @@ import { Context } from "../../store/appContext";
 import "./CanditProfile.css";
 import config from "../../config";
 
-const formularioTemplate = {
-  nombre: null,
-  primerApellido: null,
-  segundoApellido: null,
-  puestoTrabajo: null,
-  telefono: null,
-  experiencia: null,
-  cv: null,
-  cartaPresentacion: null,
-  tipoEmpleo: null,
-  provincia: null,
-};
-
 const infoBase = {
   candidato: null,
   provincias: null,
@@ -98,7 +85,7 @@ export const FormularioCandit = () => {
     body.append("nombre", nombre);
     body.append("primer_apellido", primerApellido);
     body.append("segundo_apellido", segundoApellido);
-    body.append("puesto_trab", Number(puestoTrab));
+    body.append("puesto_trabajo", Number(puestoTrab));
     body.append("telefono", telefono);
     body.append("experiencia", experiencia);
     body.append("cv", cv);
@@ -156,7 +143,7 @@ export const FormularioCandit = () => {
 
   const setVisible = () => {
     const esVisible = document.getElementById("habilitar-deshabilitar").checked;
-    console.log(">>> AQUIII: ", esVisible);
+    console.log(esVisible);
 
     fetch(`${config.HOSTNAME}/api/edit_visible_candidato/${store.userId}`, {
       method: "PUT",
@@ -291,7 +278,7 @@ export const FormularioCandit = () => {
                 className="form-select mt-2"
                 aria-label="tipoEmpleo"
                 required
-                id="tipoEmpleos"
+                id="tipoEmpleo"
               >
                 <option defaultValue>Selecciona un tipo de trabajo</option>
 
@@ -301,7 +288,7 @@ export const FormularioCandit = () => {
                     key={pt.id}
                     value={pt.id}
                   >
-                    {pt.Nempleo}
+                    {pt.NEmpleo}
                   </option>
                 ))}
               </select>
@@ -325,7 +312,7 @@ export const FormularioCandit = () => {
                     key={t.id}
                     value={t.id}
                   >
-                    {t.Ntrabajo}
+                    {t.NTrabajo}
                   </option>
                 ))}
               </select>
@@ -380,7 +367,7 @@ export const FormularioCandit = () => {
               required
               className="form-control"
               type="text-area"
-              // style={{ height: "10rem" }}
+              style={{ height: "10rem" }}
               id="carta-presentacion"
               defaultValue={informacion.candidato.carta_presen}
             ></textarea>

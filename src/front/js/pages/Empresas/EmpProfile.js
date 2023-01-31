@@ -24,7 +24,6 @@ const infoBase = {
 };
 
 export const FormularioEmp = () => {
-
   const { store, actions } = useContext(Context);
   const navigate = useNavigate();
 
@@ -38,25 +37,18 @@ export const FormularioEmp = () => {
       navigate("/");
       return;
     }
-    onPrivate(setDisabled, navigate, { namePage: "canditprofile" });
+    onPrivate(setDisabled, navigate, { namePage: "empprofile" });
     fetchEmp(userId).then(() => setLoading(false));
+    console.log(informacion);
   }, [disabled]);
 
   const fetchEmp = async (userId) => {
-    const empresaResponse = fetch(
-      `${config.HOSTNAME}/api/empresa/${userId}`
-    );
+    const empresaResponse = fetch(`${config.HOSTNAME}/api/empresa/${userId}`);
     const provinciasResponse = fetch(`${config.HOSTNAME}/api/provincias`);
-    const tiposEmpleosResponse = fetch(`${config.HOSTNAME}/api/tiposEmpleo`);
-    const sectorResponse = fetch(
-      `${config.HOSTNAME}/api/sector`
-    );
-    const promises = [
-      empresaResponse,
-      provinciasResponse,
-      tiposEmpleosResponse,
-      sectorResponse,
-    ];
+    const sectorResponse = fetch(`${config.HOSTNAME}/api/sector`);
+
+    const promises = [empresaResponse, provinciasResponse, sectorResponse];
+
     const responseList = await Promise.all(promises);
 
     const keys = Object.keys(infoBase);
@@ -68,6 +60,7 @@ export const FormularioEmp = () => {
     }
     console.log(auxInfoBase);
     setInformacion(auxInfoBase);
+
     setLoading(false);
   };
 
@@ -77,12 +70,15 @@ export const FormularioEmp = () => {
     //TODO: validar data.
     const nombreEmp = document.getElementById("nombre-empresa").value;
     const ubicacion = document.getElementById("ubicacion").value;
-    const identificacionFiscal = document.getElementById("identificacion-fiscal").value;
+    const identificacionFiscal = document.getElementById(
+      "identificacion-fiscal"
+    ).value;
     const sede = document.getElementById("sede").value;
     const tipoTrabajo = document.getElementById("tipo-trabajo").value;
     const sector = document.getElementById("sector").value;
     const telefono = document.getElementById("telefono").value;
-    const numeroTrabajadores = document.getElementById("numeroTrabajadores").value;
+    const numeroTrabajadores =
+      document.getElementById("numeroTrabajadores").value;
     const descripcion = document.getElementById("descripcion").value;
 
     const avatar = document.getElementById("subirAvatar").files[0];
@@ -104,7 +100,7 @@ export const FormularioEmp = () => {
     const userId = store.userId;
     const tokenData = JSON.parse(tokenOBJ);
     const editarEmpresaResponse = await fetch(
-      `${config.HOSTNAME}/api/edit_candidato/${userId}`,
+      `${config.HOSTNAME}/api/edit_empresa/${userId}`,
       {
         method: "PUT",
         // headers: {
@@ -117,39 +113,38 @@ export const FormularioEmp = () => {
     );
 
     window.location.reload();
+  };
+  const loadAvatar = () => {
+    const subirAvatar = document.getElementById("subirAvatar").files[0];
+    const blob = new Blob([subirAvatar], { type: subirAvatar.type });
+    const urlAvatar = URL.createObjectURL(blob);
+    console.log({ urlAvatar });
+    const imageElement = document.getElementById("avatar");
+    imageElement.src = urlAvatar;
+  };
+  const openFileWindow = () => {
+    const inputFile = document.getElementById("subirAvatar");
+    inputFile.click();
+  };
 
-    const loadAvatar = () => {
-      const subirAvatar = document.getElementById("subirAvatar").files[0];
-      const blob = new Blob([subirAvatar], { type: subirAvatar.type });
-      const urlAvatar = URL.createObjectURL(blob);
-      console.log({ urlAvatar });
-      const imageElement = document.getElementById("avatar");
-      imageElement.src = urlAvatar;
-    };
-  
-    const openFileWindow = () => {
-      const inputFile = document.getElementById("subirAvatar");
-      inputFile.click();
-    };
+  // if (loading) {
+  //   return (
+  //     <div className="d-flex justify-content-center mt-5 mb-5 spinner">
+  //       <div
+  //         className="spinner-grow text-warning mt-5 mb-5 p-4"
+  //         role="status"
+  //       ></div>
+  //     </div>
+  //   );
+  // }
 
-    if (loading) {
-      return (
-        <div className="d-flex justify-content-center mt-5 mb-5 spinner">
-          <div
-            className="spinner-grow text-warning mt-5 mb-5 p-4"
-            role="status"
-          ></div>
-        </div>
-      );
-    }
-}
   return (
     <div className="container-fluid p-0">
       <h1 className="d-flex justify-content-center p-3 mb-2 bg-warning">
         Mi perfil
       </h1>
       <form>
-      <div className="d-flex justify-content-center">
+        {/* <div className="d-flex justify-content-center">
           <input
             id="subirAvatar"
             type="file"
@@ -158,11 +153,11 @@ export const FormularioEmp = () => {
           ></input>
           <img
             id="avatar"
-            src={informacion.candidato.avatar}
+            src={informacion.empresa.avatar}
             className="img-fluid"
             style={{ width: "16rem" }}
           />
-        </div>
+        </div> */}
         <div className="d-flex justify-content-center">
           <button
             type="button"

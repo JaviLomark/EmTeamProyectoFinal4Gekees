@@ -4,27 +4,73 @@ import { onPrivate } from "../../private";
 import config from "../../config";
 import "./listadoCandidatos.css";
 
+const infoBase = {
+  candidatos: null,
+  provincias: null,
+  tipoEmpleos: null,
+};
+
 export const ListadoCandidatos = () => {
   const navigate = useNavigate();
   const [loading, setloading] = useState(true);
   const [disabled, setDisabled] = useState(true);
-  const [candidatos, setCandidatos] = useState([]);
+  const [informacion, setInformacion] = useState(infoBase);
 
   useEffect(() => {
     // onPrivate(setDisabled, navigate, { namePage: "listado_candidatos" });
-    obtenerListaCandidatos();
+    getData();
   }, [disabled]);
 
-  const obtenerListaCandidatos = async () => {
-    const candidatosRes = await fetch(
-      `${config.HOSTNAME}/api/lista_candidatos`
-    );
-    // TODO: validar candidatosRes.status(codigo) != 200 alert
+  const getData = async () => {
+    const provinciasResponse = fetch(`${config.HOSTNAME}/api/provincias`);
+    const tiposEmpleosResponse = fetch(`${config.HOSTNAME}/api/tiposEmpleo`);
+    const candidatosRes = fetch(`${config.HOSTNAME}/api/lista_candidatos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
 
-    const data = await candidatosRes.json();
-    console.log({ data });
-    setCandidatos(data.data);
+    const promises = [candidatosRes, provinciasResponse, tiposEmpleosResponse];
+
+    const responseList = await Promise.all(promises);
+
+    // --
+    const keys = Object.keys(infoBase);
+    const auxInfoBase = { ...infoBase };
+    for (let index = 0; index < responseList.length; index++) {
+      const response = responseList[index];
+      const data = await response.json();
+      auxInfoBase[keys[index]] = data.data;
+    }
+    console.log(auxInfoBase);
+    setInformacion(auxInfoBase);
+
+    // --
     setloading(false);
+  };
+
+  const onSearch = () => {
+    const provinciaId = Number(document.getElementById("provincia").value);
+    const tipoEmpleoId = Number(document.getElementById("tipoEmpleo").value);
+
+    const candidatosRes = fetch(`${config.HOSTNAME}/api/lista_candidatos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        provinciaId: provinciaId > -1 ? provinciaId : undefined,
+        tipoEmpleoId: tipoEmpleoId > -1 ? tipoEmpleoId : undefined,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const newInformacion = JSON.parse(JSON.stringify(informacion)); // hago una copia
+        newInformacion.candidatos = data.data;
+        setInformacion(newInformacion);
+      });
   };
 
   if (loading) {
@@ -44,16 +90,25 @@ export const ListadoCandidatos = () => {
         Listado de Candidatos
       </h1>
       <div className="row justify-content-center mt-4 fw-bold ">
-        <div className="col-auto">
-          Provincia
-          <select className="form-select" aria-label="provincias">
-            <option defaultValue>Seleccionar</option>
-            <option value="madrid">Madrid</option>
-            <option value="barcelona">Barcelona</option>
-            <option value="bilbao">Bilbao</option>
+        <div className="mt-3">
+          Provincia*
+          <select
+            className="form-select mt-2"
+            aria-label="provincias"
+            required
+            id="provincia"
+            onChange={onSearch}
+          >
+            <option value={-1}>Selecciona una provincia</option>
+
+            {informacion.provincias.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.Nprovincia}
+              </option>
+            ))}
           </select>
         </div>
-        <div className="col-auto">
+        {/* <div className="col-auto">
           Tipo de empleo
           <select className="form-select" aria-label="provincias">
             <option defaultValue>Seleccionar</option>
@@ -62,9 +117,28 @@ export const ListadoCandidatos = () => {
             <option value="hibrido">Hibrido</option>
           </select>
         </div>
+         */}
+        <div className="mt-3">
+          Tipo de trabajo*
+          <select
+            className="form-select mt-2"
+            aria-label="tipoEmpleo"
+            required
+            id="tipoEmpleo"
+            onChange={onSearch}
+          >
+            <option value={-1}>Selecciona un tipo de trabajo</option>
+
+            {informacion.tipoEmpleos.map((pt) => (
+              <option key={pt.id} value={pt.id}>
+                {pt.NEmpleo}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       {/* ---- */}
-      {candidatos.map((candidato) => (
+      {informacion.candidatos.map((candidato) => (
         <>
           <div key={candidato.id} className="row justify-content-center m-3">
             <div className="card col-10 col-md-8 mt-3">

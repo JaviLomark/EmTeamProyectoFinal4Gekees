@@ -16,7 +16,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           initial: "white",
         },
       ],
-      like:[]
+      like: [],
     },
     actions: {
       // Use getActions to call a function within a fuction
@@ -32,12 +32,16 @@ const getState = ({ getStore, getActions, setStore }) => {
         setStore({ userId });
       },
       addToLike: (item) => {
-				const newStore = {...getStore()}
-
-				newStore.like = [...newStore.like, item]
-
-				setStore(newStore);
-			}
+        const store = getStore();
+        let found = store.like.find((cand) => cand.id === item.id);
+        let newLike;
+        if (found) {
+          newLike = store.like.filter((cand) => cand.id !== item.id);
+        } else {
+          newLike = [...store.like, item];
+        }
+        setStore({ like: newLike });
+      },
     },
   };
 };

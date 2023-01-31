@@ -1,13 +1,42 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import config from "../config";
+import { Context } from "../store/appContext";
 
 export const CompanyMenu = () => {
+  const { store, actions } = useContext(Context);
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("rol");
     localStorage.removeItem("userId");
+    actions.setRol(undefined);
     navigate("/");
+  };
+
+  const eliminarPerfil = async () => {
+    const mensaje = confirm("¿Quieres eliminar tu perfil?");
+    console.log({ mensaje });
+    if (mensaje) {
+      const res = await fetch(
+        `${config.HOSTNAME}/api/usuario/${store.userId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+      if (res.status != 200) {
+        alert(data.msg);
+        return;
+      }
+
+      console.log({ data });
+      logout();
+      alert("Perfil eliminado");
+    } else {
+      alert("Tu perfil NO se ha eliminado");
+    }
+    return;
   };
 
   return (
@@ -19,27 +48,34 @@ export const CompanyMenu = () => {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          MenuEmpre
+          Menu
         </button>
         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-start">
           <li>
-            <a className="dropdown-item" href="/empprofile">
+            <Link className="dropdown-item" to={`/empprofile/${store.userId}`}>
               Editar perfil
-            </a>
+            </Link>
           </li>
           <li>
-            <a className="dropdown-item" href="/listado-candidatos">
+            <Link className="dropdown-item" to="/listado-candidatos">
               Buscar candidatos
-            </a>
+            </Link>
           </li>
           <li>
-            <a className="dropdown-item">Eliminar cuenta</a>
+            <Link className="dropdown-item" to="/">
+              Mis candidatos
+            </Link>
+          </li>
+          <li>
+            <button className="dropdown-item" onClick={eliminarPerfil}>
+              Eliminar cuenta
+            </button>
           </li>
           <hr className="dropdown-divider" />
           <li>
-            <a className="dropdown-item" onClick={logout}>
+            <button className="dropdown-item" onClick={logout}>
               Cerrar sesión
-            </a>
+            </button>
           </li>
         </ul>
       </div>

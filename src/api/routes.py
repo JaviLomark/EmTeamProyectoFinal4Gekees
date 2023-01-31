@@ -224,6 +224,8 @@ def editar_candidato(id):
     carta_presen = request.form.get('carta_presen')
     tipo_emp = request.form.get('tipo_emp')
     provincia = request.form.get('provincia')
+    puesto_trabajo = request.form.get('puesto_trabajo')
+    # url_cv = request.form.get('url_cv')
     # visible = body.get('visible')
 
     # candidato.avatar = avatar if avatar != None and avatar != "" else  candidato.avatar
@@ -234,10 +236,11 @@ def editar_candidato(id):
     candidato.puesto_trabajo = puesto_trabajo if puesto_trabajo != None and puesto_trabajo != "" else  candidato.puesto_trabajo
     candidato.telefono = telefono if telefono != None and telefono != "" else  candidato.telefono
     candidato.experiencia = experiencia if experiencia != None and experiencia != "" else  candidato.experiencia
-    candidato.cv = url_cv if url_cv != None and url_cv != "" else  candidato.cv
+    # candidato.cv = url_cv if url_cv != None and url_cv != "" else  candidato.cv
     candidato.carta_presen = carta_presen if carta_presen != None and carta_presen != "" else  candidato.carta_presen
     candidato.tipo_emp = tipo_emp if tipo_emp != None and tipo_emp != "" else  candidato.tipo_emp
     candidato.provincia = provincia if provincia != None and provincia != "" else  candidato.provincia
+    candidato.puesto_trabajo = puesto_trabajo if puesto_trabajo != None and puesto_trabajo != "" else  candidato.puesto_trabajo
 
     
 
@@ -246,6 +249,7 @@ def editar_candidato(id):
 
     # # GUARDO
     db.session.commit()
+    print(candidato.serialize())
     return jsonify({"msg": ">>>>", "data": candidato.serialize()})
     
     # return jsonify({"msg": "", "data": candidato.serialize()})
@@ -330,10 +334,23 @@ def obtener_candidato(id):
     return jsonify({"msg":"", "data": candidato.serialize()}), 200
 
 
-@api.route('/lista_candidatos', methods=['GET'])
+@api.route('/lista_candidatos', methods=['POST'])
 # @jwt_required()
 def obtener_candidatos():
-    candidatos = Candidato.query.all()
+    body = request.get_json()
+    provinciaId = body.get('provinciaId')
+    tipoEmpleoId = body.get('tipoEmpleoId')
+    print(provinciaId, tipoEmpleoId)
+    candidatos = []
+    if provinciaId != None and tipoEmpleoId != None:
+        candidatos = Candidato.query.filter_by(provincia=provinciaId, tipo_emp=tipoEmpleoId).all()
+    elif provinciaId != None:
+        candidatos = Candidato.query.filter_by(provincia=provinciaId).all()
+    elif tipoEmpleoId != None:
+        candidatos = Candidato.query.filter_by(tipo_emp=tipoEmpleoId).all()
+    else:
+        candidatos = Candidato.query.filter_by().all()
+
     data = [candidato.serialize() for candidato in candidatos]
     return jsonify({"msg": "", "data": data}), 200
 

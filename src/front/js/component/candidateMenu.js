@@ -21,9 +21,6 @@ export const CandidateMenu = () => {
         `${config.HOSTNAME}/api/usuario/${store.userId}`,
         {
           method: "DELETE",
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
         }
       );
       const data = await res.json();
@@ -33,7 +30,6 @@ export const CandidateMenu = () => {
       }
 
       console.log({ data });
-      // TODO: Eliminar datos del usuario.
       logout();
       alert("Perfil eliminado");
     } else {
@@ -51,7 +47,7 @@ export const CandidateMenu = () => {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          MenuCan
+          Menu
         </button>
         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-start">
           <li>
