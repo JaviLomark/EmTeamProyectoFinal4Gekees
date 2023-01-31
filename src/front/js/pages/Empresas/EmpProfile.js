@@ -6,11 +6,11 @@ import config from "../../config";
 
 const formularioTemplate = {
   nombreEmpresa: null,
-  ubicacion: null,
+  // ubicacion: null,
   identFiscal: null,
-  sede: null,
-  tipoTrababajo: null,
-  sector: null,
+  // sede: null,
+  // tipoTrababajo: null,
+  // sector: null,
   telefono: null,
   numTrabajadores: null,
   descripcion: null,
@@ -18,9 +18,9 @@ const formularioTemplate = {
 
 const infoBase = {
   empresa: null,
-  provincias: null,
-  tipoEmpleos: null,
-  sectores: null,
+  // provincias: null,
+  // tipoEmpleos: null,
+  // sectores: null,
 };
 
 export const FormularioEmp = () => {
@@ -44,10 +44,11 @@ export const FormularioEmp = () => {
 
   const fetchEmp = async (userId) => {
     const empresaResponse = fetch(`${config.HOSTNAME}/api/empresa/${userId}`);
-    const provinciasResponse = fetch(`${config.HOSTNAME}/api/provincias`);
-    const sectorResponse = fetch(`${config.HOSTNAME}/api/sector`);
+    // const provinciasResponse = fetch(`${config.HOSTNAME}/api/provincias`);
+    // const sectorResponse = fetch(`${config.HOSTNAME}/api/sector`);
 
-    const promises = [empresaResponse, provinciasResponse, sectorResponse];
+    const promises = [empresaResponse];
+    // const promises = [empresaResponse, provinciasResponse, sectorResponse];
 
     const responseList = await Promise.all(promises);
 
@@ -65,34 +66,32 @@ export const FormularioEmp = () => {
   };
 
   const onSave = async () => {
-    console.log(">>> SALVANDO!!!!");
-
     //TODO: validar data.
     const nombreEmp = document.getElementById("nombre-empresa").value;
-    const ubicacion = document.getElementById("ubicacion").value;
+    // const ubicacion = document.getElementById("ubicacion").value;
     const identificacionFiscal = document.getElementById(
       "identificacion-fiscal"
     ).value;
-    const sede = document.getElementById("sede").value;
-    const tipoTrabajo = document.getElementById("tipo-trabajo").value;
-    const sector = document.getElementById("sector").value;
+    // const sede = document.getElementById("sede").value;
+    // const tipoTrabajo = document.getElementById("tipo-trabajo").value;
+    // const sector = document.getElementById("sector").value;
     const telefono = document.getElementById("telefono").value;
     const numeroTrabajadores =
       document.getElementById("numeroTrabajadores").value;
     const descripcion = document.getElementById("descripcion").value;
 
-    const avatar = document.getElementById("subirAvatar").files[0];
-    console.log({ avatar });
+    // const avatar = document.getElementById("subirAvatar").files[0];
+    // console.log({ avatar });
 
     const body = new FormData();
-    body.append("avatar", avatar);
+    // body.append("avatar", avatar);
     body.append("nombre_emp", nombreEmp);
-    body.append("ubicacion", ubicacion);
-    body.append("tipo_trab", Number(tipoTrabajo));
+    // body.append("ubicacion", ubicacion);
+    // body.append("tipo_trab", Number(tipoTrabajo));
     body.append("telefono", telefono);
     body.append("numero_trab", numeroTrabajadores);
-    body.append("sede", sede);
-    body.append("sector", Number(sector));
+    // body.append("sede", sede);
+    // body.append("sector", Number(sector));
     body.append("identificacion_fiscal", identificacionFiscal);
     body.append("descripcion", descripcion);
 
@@ -114,18 +113,18 @@ export const FormularioEmp = () => {
 
     window.location.reload();
   };
-  const loadAvatar = () => {
-    const subirAvatar = document.getElementById("subirAvatar").files[0];
-    const blob = new Blob([subirAvatar], { type: subirAvatar.type });
-    const urlAvatar = URL.createObjectURL(blob);
-    console.log({ urlAvatar });
-    const imageElement = document.getElementById("avatar");
-    imageElement.src = urlAvatar;
-  };
-  const openFileWindow = () => {
-    const inputFile = document.getElementById("subirAvatar");
-    inputFile.click();
-  };
+  // const loadAvatar = () => {
+  //   const subirAvatar = document.getElementById("subirAvatar").files[0];
+  //   const blob = new Blob([subirAvatar], { type: subirAvatar.type });
+  //   const urlAvatar = URL.createObjectURL(blob);
+  //   console.log({ urlAvatar });
+  //   const imageElement = document.getElementById("avatar");
+  //   imageElement.src = urlAvatar;
+  // };
+  // const openFileWindow = () => {
+  //   const inputFile = document.getElementById("subirAvatar");
+  //   inputFile.click();
+  // };
 
   // if (loading) {
   //   return (
@@ -155,10 +154,10 @@ export const FormularioEmp = () => {
             id="avatar"
             src={informacion.empresa.avatar}
             className="img-fluid"
-            style={{ width: "16rem" }}
+            style={{ width: "12rem" }}
           />
         </div> */}
-        <div className="d-flex justify-content-center">
+        {/* <div className="d-flex justify-content-center">
           <button
             type="button"
             className="btn btn-primary m-1 p-1"
@@ -166,7 +165,7 @@ export const FormularioEmp = () => {
           >
             Cambiar foto
           </button>
-        </div>
+        </div> */}
         {/* Columna derecha/izquierda */}
         <div className="row justify-content-center m-5 fw-bold">
           {/* Columna izquierda */}
@@ -182,7 +181,7 @@ export const FormularioEmp = () => {
                 required
               />
             </div>
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <label htmlFor="ubicacion" className="form-label">
                 Ubicación*
               </label>
@@ -192,7 +191,7 @@ export const FormularioEmp = () => {
                 id="ubicacion"
                 required
               />
-            </div>
+            </div> */}
             <div className="mt-3">
               <label htmlFor="identificacion-fiscal" className="form-label">
                 Identificacion fiscal*
@@ -204,16 +203,16 @@ export const FormularioEmp = () => {
                 id="identificacion-fiscal"
               />
             </div>
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <label htmlFor="sede" className="form-label">
                 Sede*
               </label>
               <input type="text" className="form-control" id="sede" required />
-            </div>
+            </div> */}
           </div>
           {/* Columna derecha */}
           <div className="col-md-4">
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <label htmlFor="tipo-trabajo" className="form-label">
                 Tipo de Trabajo*
               </label>
@@ -223,8 +222,8 @@ export const FormularioEmp = () => {
                 id="tipo-trabajo"
                 required
               />
-            </div>
-            <div className="mt-3">
+            </div> */}
+            {/* <div className="mt-3">
               Sector*
               <select className="form-select mt-2" aria-label="sector" required>
                 <option defaultValue>Selecciona un sector*</option>
@@ -232,7 +231,7 @@ export const FormularioEmp = () => {
                 <option value="Junior">Junior</option>
                 <option value="Senior">Senior</option>
               </select>
-            </div>
+            </div> */}
             <div className="mt-3">
               <label htmlFor="telefono" className="form-label">
                 Télefono*

@@ -89,8 +89,8 @@ export const ListadoCandidatos = () => {
       <h1 className="d-flex justify-content-center p-3 mb-2 bg-warning">
         Listado de Candidatos
       </h1>
-      <div className="row justify-content-center mt-4 fw-bold ">
-        <div className="mt-3">
+      <div className="row justify-content-center mt-3 fw-bold">
+        <div className="mt-3 col-4 col-xl-3">
           Provincia*
           <select
             className="form-select mt-2"
@@ -108,17 +108,7 @@ export const ListadoCandidatos = () => {
             ))}
           </select>
         </div>
-        {/* <div className="col-auto">
-          Tipo de empleo
-          <select className="form-select" aria-label="provincias">
-            <option defaultValue>Seleccionar</option>
-            <option value="presencial">Presencial</option>
-            <option value="remoto">Remoto</option>
-            <option value="hibrido">Hibrido</option>
-          </select>
-        </div>
-         */}
-        <div className="mt-3">
+        <div className="mt-3 col-4 col-xl-3">
           Tipo de trabajo*
           <select
             className="form-select mt-2"
@@ -141,10 +131,10 @@ export const ListadoCandidatos = () => {
       {informacion.candidatos.map((candidato) => (
         <>
           <div key={candidato.id} className="row justify-content-center m-3">
-            <div className="card col-10 col-md-8 mt-3">
+            <div className="card col-10 mt-3">
               <div className="row">
                 <div className="col-2">
-                  <img src={candidato.avatar} className="img-fluid"></img>
+                  <img src={candidato.avatar} style={{ width: "5rem" }}></img>
                 </div>
                 <div className="col-8">
                   <div className="card-body">
@@ -169,7 +159,6 @@ export const ListadoCandidatos = () => {
           </div>
         </>
       ))}
-      {/* ---- */}
     </div>
   );
 };

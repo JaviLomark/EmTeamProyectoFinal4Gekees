@@ -1,15 +1,16 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import config from "../config";
 import { Context } from "../store/appContext";
 
 export const CandidateMenu = () => {
-  const { store } = useContext(Context);
+  const { store, actions } = useContext(Context);
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("rol");
     localStorage.removeItem("userId");
+    actions.setRol(undefined);
     navigate("/");
   };
 
@@ -51,23 +52,23 @@ export const CandidateMenu = () => {
         </button>
         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-start">
           <li>
-            <a
+            <Link
               className="dropdown-item"
-              href={`/canditprofile/${store.userId}`}
+              to={`/canditprofile/${store.userId}`}
             >
               Editar perfil
-            </a>
+            </Link>
           </li>
           <li>
-            <a className="dropdown-item" onClick={eliminarPerfil}>
+            <button className="dropdown-item" onClick={eliminarPerfil}>
               Eliminar cuenta
-            </a>
+            </button>
           </li>
           <hr className="dropdown-divider" />
           <li>
-            <a className="dropdown-item" onClick={logout}>
+            <button className="dropdown-item" onClick={logout}>
               Cerrar sesión
-            </a>
+            </button>
           </li>
         </ul>
       </div>

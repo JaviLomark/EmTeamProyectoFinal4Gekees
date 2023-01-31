@@ -63,8 +63,6 @@ export const FormularioCandit = () => {
   };
 
   const onSave = async () => {
-    console.log(">>> SALVANDO!!!!");
-
     //TODO: validar data.
     const nombre = document.getElementById("nombre").value;
     const primerApellido = document.getElementById("primer-apellido").value;
@@ -185,7 +183,7 @@ export const FormularioCandit = () => {
             id="avatar"
             src={informacion.candidato.avatar}
             className="img-fluid"
-            style={{ width: "16rem" }}
+            style={{ width: "12rem" }}
           />
         </div>
         <div className="d-flex justify-content-center">

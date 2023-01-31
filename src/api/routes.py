@@ -191,7 +191,6 @@ def get_puestosTrabajo():
 
 
 @api.route('/edit_candidato/<int:id>', methods=['PUT'])
-# @api.route('/prueba', methods=['GET'])
 # @jwt_required()
 def editar_candidato(id):
     # data = get_jwt_identity()
@@ -308,6 +307,7 @@ def editar_empresa(id):
     empresa.indentificacion_fiscal = indentificacion_fiscal if indentificacion_fiscal != None and indentificacion_fiscal != "" else  empresa.indentificacion_fiscal
     # ----
     db.session.commit()
+    print(empresa.serialize())
     return jsonify({"msg": ">>>>", "data": empresa.serialize()})
 
 def uploadAvatar():
@@ -402,19 +402,6 @@ def edit_visible_candidato(id):
     db.session.commit()
     return jsonify({"msg": ">>>>", "data": candidato.serialize()})
     
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # @api.route('/candidato/<int:id>/', methods=['PUT'])
 # @jwt_required()
